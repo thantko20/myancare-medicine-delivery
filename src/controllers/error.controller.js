@@ -7,6 +7,7 @@ function sendApiError(error, res) {
   res.status(error.statusCode).json({
     code: error.statusCode,
     message: error.message,
+    ...(error.errors && { errors: error.errors }),
     ...(NODE_ENV !== 'production' && { stack: error.stack }),
   });
 }
