@@ -1,8 +1,8 @@
+/* eslint-disable no-console */
 const mongoose = require('mongoose');
 
 const seedUsers = require('./seedUsers');
 const { MONGODB_URI, NODE_ENV } = require('../constants');
-const userModel = require('../models/user.model');
 
 mongoose.set('strictQuery', false);
 mongoose
