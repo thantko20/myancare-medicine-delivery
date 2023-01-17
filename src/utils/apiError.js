@@ -1,13 +1,14 @@
 class ApiError extends Error {
-  constructor(message, statusCode) {
+  constructor(message, statusCode, errors = {}) {
     super(message);
     this.statusCode = statusCode;
+    this.errors = errors;
 
     Error.captureStackTrace(this, this.constructor);
   }
 
-  static badRequest(message = 'Invalid Request') {
-    return new ApiError(message, 400);
+  static badRequest(message = 'Invalid Request', errors = {}) {
+    return new ApiError(message, 400, errors);
   }
 
   static notAuthenticated(message = 'Not Authenticated') {
