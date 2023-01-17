@@ -24,6 +24,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
