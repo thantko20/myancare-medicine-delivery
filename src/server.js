@@ -17,6 +17,7 @@ mongoose
   .connect(MONGODB_URI, {
     dbName: 'medicine-delivery',
     useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
   .then(() => console.log('Connection to MongoDB established.'));
 
