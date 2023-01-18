@@ -16,9 +16,14 @@ mongoose
     console.log('🌱 Seeding....');
     seed()
       .then(() => console.log('✅ Successfully seeded.'))
-      .catch(() => console.log('❌ Seeding failed.'))
+      .catch((error) => {
+        console.log(error.message);
+        console.log('❌ Seeding failed.');
+      })
       .finally(() => {
-        mongoose.disconnect();
+        mongoose.disconnect().then(() => {
+          process.exit(1);
+        });
       });
   });
 
