@@ -1,13 +1,20 @@
 const multer = require('multer');
-const path = require('path');
-const ApiError = require('../utils/apiError');
 
-const storage = multer.diskStorage({
-  destination: path.join(__dirname, '../public/images'),
-  filename: function (req, file, cb) {
-    const suffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const ext = file.originalname.split('.').slice(-1).pop();
-    cb(null, file.fieldname + '-' + suffix + '.' + ext);
+const ApiError = require('../utils/apiError');
+const cloudinary = require('../lib/cloudinary');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'images',
+    format: 'jpeg',
+    public_id: (req, file) => {
+      const suffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      const ext = file.originalname.split('.').slice(-1).pop();
+      const filename = `${file.fieldname}-${suffix}.${ext}`;
+      return filename;
+    },
   },
 });
 
