@@ -11,7 +11,16 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log('Connection to MongoDB established.'));
+  .then(() => {
+    console.log('Connection to MongoDB established.');
+    console.log('🌱 Seeding....');
+    seed()
+      .then(() => console.log('✅ Successfully seeded.'))
+      .catch(() => console.log('❌ Seeding failed.'))
+      .finally(() => {
+        mongoose.disconnect();
+      });
+  });
 
 const dropCollections = async () => {
   const collections = mongoose.connection.collections;
@@ -25,14 +34,6 @@ const dropCollections = async () => {
 async function seed() {
   if (NODE_ENV === 'production')
     throw Error('Seeding should not be done in production mode.');
-  console.log('Seeding....');
   await dropCollections();
   const users = await seedUsers();
 }
-
-seed()
-  .then(() => console.log('Successfully seeded.'))
-  .finally(() => {
-    mongoose.disconnect();
-    console.log('Closed MongoDB');
-  });

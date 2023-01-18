@@ -1,11 +1,13 @@
-// Model -> Mongoose Model
-// Schema -> a function that returns a single doc
+// generateDoc -> function for generating a single doc. Eg: new UserModel({name: 'John'})
 // size -> number of docs
-async function seedData({ model, schema, size }) {
-  const docs = await model.insertMany(
+async function seedData({ generateDoc, size }) {
+  const docs = await Promise.all(
     Array(size)
       .fill()
-      .map(() => schema())
+      .map(() => {
+        const doc = generateDoc();
+        return doc.save();
+      })
   );
   return docs;
 }
