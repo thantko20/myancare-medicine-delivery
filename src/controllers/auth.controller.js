@@ -8,14 +8,20 @@ const {
 
 exports.registerUser = catchAsync(async (req, res, next) => {
   const user = await authService.registerUser(req.body);
-  const { accessToken, refreshToken } = authService.createUserTokens(user.id);
+  const { accessToken, refreshToken } = authService.createUserTokens(
+    user.id,
+    'customer'
+  );
 
   sendTokens(res, { accessToken, refreshToken, user });
 });
 
 exports.loginUser = catchAsync(async (req, res, next) => {
   const user = await authService.loginUser(req.body);
-  const { accessToken, refreshToken } = authService.createUserTokens(user.id);
+  const { accessToken, refreshToken } = authService.createUserTokens(
+    user.id,
+    'customer'
+  );
 
   sendTokens(res, { accessToken, refreshToken, user });
 });
@@ -27,6 +33,16 @@ exports.createAdmin = catchAsync(async (req, res, next) => {
     code: 201,
     data: admin,
   });
+});
+
+exports.loginAdmin = catchAsync(async (req, res, next) => {
+  const admin = await authService.loginAdmin(req.body);
+  const { accessToken, refreshToken } = authService.createUserTokens(
+    admin.id,
+    'admin'
+  );
+
+  sendTokens(res, { accessToken, refreshToken, user: admin });
 });
 
 function sendTokens(res, { accessToken, refreshToken, user }) {

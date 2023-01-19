@@ -36,10 +36,10 @@ exports.loginUser = async ({ email, password }) => {
   return user;
 };
 
-exports.createUserTokens = (userId) => {
+exports.createUserTokens = (userId, userType) => {
   const accessToken = generateAccessToken({
     userId,
-    userType: 'customer',
+    userType,
   });
   const refreshToken = generateRefreshToken();
 
@@ -62,6 +62,20 @@ exports.createAdmin = async (data, currentUserAdminRole) => {
   }
 
   const admin = await Admin.create({ ...data, password: '12345678' });
+  admin.password = undefined;
+
+  return admin;
+};
+
+exports.loginAdmin = async ({ email, password }) => {
+  const loginError = ApiError.badRequest('Invalid credentials.');
+  const admin = await Admin.findOne({ email }).select('+password');
+
+  if (!admin) throw loginError;
+
+  const isValidPassword = await comparePasswords(password, admin.password);
+  if (!isValidPassword) throw loginError;
+
   admin.password = undefined;
 
   return admin;
