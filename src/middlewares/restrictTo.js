@@ -11,7 +11,7 @@ const restrictTo = (onlyUser = false, roles = []) =>
       return next(notAuthorizedError);
     }
 
-    if (!ADMIN_ROLE_LIST.includes(req.user.role)) {
+    if (!roles.includes(req.user.role)) {
       return next(notAuthorizedError);
     }
 
