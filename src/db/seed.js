@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-const seedUsers = require('./seedUsers');
+const { seedUsers, seedProducts } = require('./seedUsers');
 const { MONGODB_URI, NODE_ENV } = require('../constants');
 
 mongoose.set('strictQuery', false);
@@ -27,7 +28,9 @@ async function seed() {
     throw Error('Seeding should not be done in production mode.');
   console.log('Seeding....');
   await dropCollections();
-  const users = await seedUsers();
+  // const products = await seedProducts();
+
+  // const reviews = await seedReviews(users);
 }
 
 seed()
