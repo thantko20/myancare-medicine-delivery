@@ -47,6 +47,9 @@ const medicineService = {
   },
   createMedicine: async (reqBody) => {
     const newMedicine = await Medicine.create(reqBody);
+    newMedicine.save({
+      validateBeforeSave: false,
+    });
     return newMedicine;
   },
   updateMedicine: async (medicineId, reqBody) => {

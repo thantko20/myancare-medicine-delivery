@@ -31,7 +31,7 @@ const medicineSchema = new Schema(
       required: true,
       min: 0,
       max: 599,
-      select: false,
+      // select: false,
     },
     expiredDate: {
       type: Date,
@@ -40,14 +40,8 @@ const medicineSchema = new Schema(
   },
   {
     timestamps: true,
-  },
-  {
-    toJSON: {
-      virtuals: true,
-    },
-    toObject: {
-      virtuals: true,
-    },
+    toJSON: { virtuals: true },
+    toObject: { virtual: true },
   }
 );
 
