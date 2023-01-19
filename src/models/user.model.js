@@ -10,7 +10,7 @@ const userSchema = new Schema(
       required: true,
       select: false,
       minLength: 6,
-      maxLength: 16,
+      maxLength: 32,
     },
     customerId: { type: String, unique: true },
     phone: {

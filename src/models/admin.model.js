@@ -18,7 +18,7 @@ const adminSchema = new Schema({
     unique: true,
     required: true,
     minLength: 6,
-    maxLength: 16,
+    maxLength: 32,
   },
   role: { type: String, enum: ADMIN_ROLE_LIST, required: true },
 });
