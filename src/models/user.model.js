@@ -1,20 +1,27 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const userSchema = new Schema({
-  name: { type: String, required: true },
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
-  customerId: { type: String, unique: true },
-  phone: { type: String, unique: true, required: true },
-  address: {
-    zipcode: { type: String, required: true },
-    street: { type: String, required: true },
-    state: { type: String, required: true },
-    city: { type: String, required: true },
-    country: { type: String, required: true },
+const userSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true, select: false },
+    customerId: { type: String, unique: true },
+    phone: { type: String, unique: true, required: true },
+    address: {
+      zipcode: { type: String, required: true },
+      street: { type: String, required: true },
+      state: { type: String, required: true },
+      city: { type: String, required: true },
+      country: { type: String, required: true },
+    },
+    refreshToken: { type: String, select: false },
+    refreshTokenExpires: { type: String, select: false },
   },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const hashPassword = async function (next) {
   if (!this.isModified('password')) return next();
