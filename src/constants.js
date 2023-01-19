@@ -30,4 +30,3 @@ exports.ADMIN_ROLES = {
 };
 
 exports.ADMIN_ROLE_LIST = Object.values(this.ADMIN_ROLES);
-console.log(this.ADMIN_ROLE_LIST);
