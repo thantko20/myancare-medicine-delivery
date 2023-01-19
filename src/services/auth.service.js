@@ -41,7 +41,7 @@ exports.createUserTokens = (userId, userType) => {
     userId,
     userType,
   });
-  const refreshToken = generateRefreshToken();
+  const refreshToken = generateRefreshToken({ userId, userType });
 
   return { accessToken, refreshToken };
 };
@@ -49,16 +49,14 @@ exports.createUserTokens = (userId, userType) => {
 exports.createAdmin = async (data, currentUserAdminRole) => {
   const notAuthorizedError = ApiError.notAuthorized();
 
-  if (NODE_ENV === 'production') {
-    if (!currentUserAdminRole) throw notAuthorizedError;
+  if (!currentUserAdminRole) throw notAuthorizedError;
 
-    const isCurrentUserAdminRole = currentUserAdminRole === ADMIN_ROLES.admin;
-    const isDataAdminOrSuperadmin =
-      data.role === ADMIN_ROLES.admin || data.role === ADMIN_ROLES.superadmin;
+  const isCurrentUserAdminRole = currentUserAdminRole === ADMIN_ROLES.admin;
+  const isDataAdminOrSuperadmin =
+    data.role === ADMIN_ROLES.admin || data.role === ADMIN_ROLES.superadmin;
 
-    if (isCurrentUserAdminRole && isDataAdminOrSuperadmin) {
-      throw notAuthorizedError;
-    }
+  if (isCurrentUserAdminRole && isDataAdminOrSuperadmin) {
+    throw notAuthorizedError;
   }
 
   const admin = await Admin.create({ ...data, password: '12345678' });
@@ -79,6 +77,34 @@ exports.loginAdmin = async ({ email, password }) => {
   admin.password = undefined;
 
   return admin;
+};
+
+exports.validateRefreshToken = (token) => {
+  return new Promise((resolve, reject) => {
+    if (!token) reject(ApiError.notAuthenticated('Please log in again.'));
+    jwt.verify(token, REFRESH_TOKEN_SECRET, async (error, decoded) => {
+      if (error) reject(ApiError.notAuthenticated('Please log in again.'));
+
+      let user;
+      switch (decoded.userType) {
+        case 'admin':
+          user = await Admin.findById(decoded.userId);
+          break;
+        case 'customer':
+          user = await User.findById(decoded.userId);
+          break;
+        default:
+          reject(ApiError.notAuthenticated('You are not authorized.'));
+      }
+      user.type = decoded.userType;
+      resolve(
+        generateAccessToken({
+          userId: decoded.userId,
+          userType: decoded.userType,
+        })
+      );
+    });
+  });
 };
 
 function generateAccessToken(payload) {

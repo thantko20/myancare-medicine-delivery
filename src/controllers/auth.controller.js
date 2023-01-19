@@ -45,18 +45,35 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
   sendTokens(res, { accessToken, refreshToken, user: admin });
 });
 
-function sendTokens(res, { accessToken, refreshToken, user }) {
+exports.refreshAccessToken = catchAsync(async (req, res, next) => {
+  const accessToken = await authService.validateRefreshToken(
+    req.cookies.refresh_token
+  );
+  res.cookie('access_token', accessToken, {
+    maxAge: ACCESS_TOKEN_EXPIRES * 1000,
+    httpOnly: true,
+    secure: NODE_ENV === 'production',
+  });
+  res.json({
+    code: 200,
+    data: accessToken,
+  });
+});
+
+function sendTokens(res, { accessToken, refreshToken = undefined, user }) {
   res.cookie('access_token', accessToken, {
     maxAge: ACCESS_TOKEN_EXPIRES * 1000,
     httpOnly: true,
     secure: NODE_ENV === 'production',
   });
 
-  res.cookie('refresh_token', refreshToken, {
-    maxAge: REFRESH_TOKEN_EXPIRES * 1000,
-    httpOnly: true,
-    secure: NODE_ENV === 'production',
-  });
+  if (refreshToken) {
+    res.cookie('refresh_token', refreshToken, {
+      maxAge: REFRESH_TOKEN_EXPIRES * 1000,
+      httpOnly: true,
+      secure: NODE_ENV === 'production',
+    });
+  }
 
   res.json({
     code: 200,

@@ -18,6 +18,8 @@ router.post('/login', validate(loginUserSchema), authController.loginUser);
 
 router.post('/login/admin', authController.loginAdmin);
 
+router.post('/refresh-token', authController.refreshAccessToken);
+
 router.post(
   '/create-admin',
   validate(createAdminSchema),

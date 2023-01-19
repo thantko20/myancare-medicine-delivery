@@ -26,8 +26,10 @@ const autheticate = catchAsync(async (req, res, next) => {
         user = await User.findById(decoded.userId);
         break;
       default:
-        throw ApiError.notAuthenticated('You are not authorized.');
+        next(ApiError.notAuthenticated('You are not authorized.'));
     }
+
+    if (!user) return next(ApiError.badRequest());
 
     req.user = user;
 
