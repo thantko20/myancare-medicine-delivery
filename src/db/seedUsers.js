@@ -7,9 +7,9 @@ const getRandomElementFromArray = require('../utils/getRandomElementFromArray');
 
 const seedUsers = async () => {
   return await seedData({
-    model: User,
+    model: userModel,
     generateDoc: () =>
-      new User({
+      new userModel({
         name: faker.name.fullName(),
         email: faker.internet.email(),
         password: '12345678',
