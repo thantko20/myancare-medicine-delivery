@@ -3,9 +3,9 @@
 const router = require('express').Router();
 
 const exampleRouter = require('./exampleRoutes');
-const productRouter = require('./medicineRoutes');
+const medicineRouter = require('./medicineRoutes');
 
 router.use('/examples', exampleRouter);
-router.use('/products', productRouter);
+router.use('/medicines', medicineRouter);
 
 module.exports = router;

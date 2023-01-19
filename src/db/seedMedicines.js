@@ -1,15 +1,12 @@
 const { faker } = require('@faker-js/faker');
-
-const seedData = require('./seedData');
-const User = require('../models/user.model');
 const Medicine = require('../models/medicine.model');
-const getRandomElementFromArray = require('../utils/getRandomElementFromArray');
+const seedData = require('./seedData');
 
-const seedUsers = async () => {
+exports.seedMedicines = async () => {
   return await seedData({
-    model: User,
+    model: Medicine,
     generateDoc: () =>
-      new User({
+      new Medicine({
         name: faker.name.fullName(),
         email: faker.internet.email(),
         password: '12345678',
@@ -18,5 +15,3 @@ const seedUsers = async () => {
     size: 100,
   });
 };
-
-module.exports = { seedUsers };

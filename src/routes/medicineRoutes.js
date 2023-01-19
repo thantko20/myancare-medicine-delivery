@@ -3,7 +3,7 @@ const medicineController = require('../controllers/medicine.controller');
 const { PAGE_LIMIT, DEFAULT_SORTING } = require('../constants');
 require('dotenv').config();
 
-const firstAllProducts = (req, res, next) => {
+const firstAllMedicines = (req, res, next) => {
   req.query.limit = PAGE_LIMIT;
   req.query.sort = DEFAULT_SORTING;
   next();
@@ -11,14 +11,14 @@ const firstAllProducts = (req, res, next) => {
 
 router
   .route('/')
-  .get(firstAllProducts, medicineController.getAllProducts)
-  .post(medicineController.createProduct);
+  .get(firstAllMedicines, medicineController.getAllMedicines)
+  .post(medicineController.createMedicine);
 
 router
   .route('/:id')
-  .get(medicineController.getProduct)
-  .patch(medicineController.updateProduct)
-  .delete(medicineController.deleteProduct);
+  .get(medicineController.getMedicine)
+  .patch(medicineController.updateMedicine)
+  .delete(medicineController.deleteMedicine);
 
 router.route('/:id/updateQuantity').patch(medicineController.updateQuantity);
 

@@ -2,45 +2,48 @@ const medicineService = require('../services/medicine.service');
 const catchAsync = require('../utils/catchAsync');
 const apiError = require('../utils/apiError');
 
-exports.getAllProducts = catchAsync(async (req, res, next) => {
-  const products = await medicineService.getAllProducts(req.query);
+exports.getAllMedicines = catchAsync(async (req, res, next) => {
+  const medicines = await medicineService.getAllMedicines(req.query);
   res.status(200).json({
     data: {
-      totalCount: products.length,
-      products,
+      totalCount: medicines.length,
+      medicines,
     },
   });
 });
 
-exports.getProduct = catchAsync(async (req, res, next) => {
-  const product = await medicineService.getProduct(req.params.id);
+exports.getMedicine = catchAsync(async (req, res, next) => {
+  const medicine = await medicineService.getMedicine(req.params.id);
   res.status(200).json({
     data: {
-      product,
+      medicine,
     },
   });
 });
 
-exports.createProduct = catchAsync(async (req, res, next) => {
-  const newProduct = await medicineService.createProduct(req.body);
+exports.createMedicine = catchAsync(async (req, res, next) => {
+  const newMedicine = await medicineService.createMedicine(req.body);
   res.status(200).json({
     data: {
-      newProduct,
+      newMedicine,
     },
   });
 });
 
-exports.updateProduct = catchAsync(async (req, res, next) => {
+exports.updateMedicine = catchAsync(async (req, res, next) => {
   if (req.body.countInstock) {
     throw new apiError(
       'This route is not for updating countInstock quantity',
       400
     );
   }
-  const product = await medicineService.updateProduct(req.params.id, req.body);
+  const medicine = await medicineService.updateMedicine(
+    req.params.id,
+    req.body
+  );
   res.status(200).json({
     data: {
-      product,
+      medicine,
     },
   });
 });
@@ -53,13 +56,13 @@ exports.updateQuantity = catchAsync(async (req, res, next) => {
   };
 
   if (req.body.countInstock) {
-    const product = await medicineService.updateQuantity(
+    const medicine = await medicineService.updateQuantity(
       req.params.id,
       filterObj(req.body, 'countInstock')
     );
     res.status(200).json({
       data: {
-        product,
+        medicine,
       },
     });
   } else {
@@ -69,11 +72,10 @@ exports.updateQuantity = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.deleteProduct = catchAsync(async (req, res, next) => {
-  const product = await medicineService.deleteProduct(req.params.id);
+exports.deleteMedicine = catchAsync(async (req, res, next) => {
+  const medicine = await medicineService.deleteMedicine(req.params.id);
   res.status(200).json({
-    data: {
-      product,
-    },
+    status: 'success',
+    data: null,
   });
 });

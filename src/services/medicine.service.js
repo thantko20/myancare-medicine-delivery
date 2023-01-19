@@ -1,8 +1,8 @@
-const Product = require('../models/medicine.model');
+const Medicine = require('../models/medicine.model');
 const APIFeatures = require('../utils/apiFeatures');
 
 const medicineService = {
-  getAllProducts: async (reqQuery) => {
+  getAllMedicines: async (reqQuery) => {
     const customFilter = {
       // $or: [
       //   {
@@ -31,41 +31,48 @@ const medicineService = {
         },
       }),
     };
-    const features = new APIFeatures(Product.find(), reqQuery)
+    const features = new APIFeatures(Medicine.find(), reqQuery)
       .filter(customFilter)
       .sort()
       .limitFields()
       .paginate();
     // const doc = await features.query.explain();
     const result = await features.query;
-    const products = await result;
-    return products;
+    const medicine = await result;
+    return medicine;
   },
-  getProduct: async (productId) => {
-    const product = await Product.findById(productId);
-    return product;
+  getMedicine: async (medicineId) => {
+    const medicine = await Medicine.findById(medicineId);
+    return medicine;
   },
-  createProduct: async (reqBody) => {
-    const newProduct = await Product.create(reqBody);
-    return newProduct;
+  createMedicine: async (reqBody) => {
+    const newMedicine = await Medicine.create(reqBody);
+    return newMedicine;
   },
-  updateProduct: async (productId, reqBody) => {
-    const updatedProduct = await Product.findByIdAndUpdate(productId, reqBody, {
-      runValidators: true,
-      new: true,
-    });
-    return updatedProduct;
+  updateMedicine: async (medicineId, reqBody) => {
+    const updatedmedicine = await Medicine.findByIdAndUpdate(
+      medicineId,
+      reqBody,
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
+    return updatedmedicine;
   },
-  updateQuantity: async (productId, reqBody) => {
-    const updatedProduct = await Product.findByIdAndUpdate(productId, reqBody, {
-      runValidators: true,
-      new: true,
-    });
-    return updatedProduct;
+  updateQuantity: async (medicineId, reqBody) => {
+    const updatedMedicine = await Medicine.findByIdAndUpdate(
+      medicineId,
+      reqBody,
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
+    return updatedMedicine;
   },
-  deleteProduct: async (productId) => {
-    const deletedProduct = await Product.findByIdAndDelete(productId);
-    return deletedProduct;
+  deleteMedicine: async (medicineId) => {
+    const deletedMedicine = await Medicine.findByIdAndDelete(medicineId);
   },
 };
 

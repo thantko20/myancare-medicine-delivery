@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const productSchema = new Schema(
+const medicineSchema = new Schema(
   {
     name: {
       type: String,
@@ -51,10 +51,10 @@ const productSchema = new Schema(
   }
 );
 
-productSchema.virtual('isInStock').get(function () {
+medicineSchema.virtual('isInStock').get(function () {
   return this.countInstock > 0;
 });
 
-const Product = model('Product', productSchema);
+const Medicine = model('Medicine', medicineSchema);
 
-module.exports = Product;
+module.exports = Medicine;
