@@ -1,4 +1,6 @@
 const { Schema, model } = require('mongoose');
+const bcrypt = require('bcrypt');
+
 const { ADMIN_ROLE_LIST } = require('../constants');
 
 const adminSchema = new Schema({
@@ -20,6 +22,15 @@ const adminSchema = new Schema({
   },
   role: { type: String, enum: ADMIN_ROLE_LIST, required: true },
 });
+
+const hashPassword = async function (next) {
+  if (!this.isModified('password')) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+  next();
+};
+
+adminSchema.pre('save', hashPassword);
 
 const Admin = model('Admin', adminSchema);
 

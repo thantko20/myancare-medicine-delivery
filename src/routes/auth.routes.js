@@ -13,4 +13,6 @@ router.post(
 
 router.post('/login', validate(loginUserSchema), authController.loginUser);
 
+router.post('/create-admin', authController.createAdmin);
+
 module.exports = router;

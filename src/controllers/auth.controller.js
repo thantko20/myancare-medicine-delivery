@@ -20,6 +20,15 @@ exports.loginUser = catchAsync(async (req, res, next) => {
   sendTokens(res, { accessToken, refreshToken, user });
 });
 
+exports.createAdmin = catchAsync(async (req, res, next) => {
+  const admin = await authService.createAdmin(req.body, req.user.role);
+
+  res.json({
+    code: 201,
+    data: admin,
+  });
+});
+
 function sendTokens(res, { accessToken, refreshToken, user }) {
   res.cookie('access_token', accessToken, {
     maxAge: ACCESS_TOKEN_EXPIRES * 1000,

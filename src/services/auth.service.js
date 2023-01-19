@@ -8,7 +8,9 @@ const {
   REFRESH_TOKEN_SECRET,
   ACCESS_TOKEN_EXPIRES,
   REFRESH_TOKEN_EXPIRES,
+  ADMIN_ROLES,
 } = require('../constants');
+const Admin = require('../models/admin.model');
 
 exports.registerUser = async (data) => {
   const user = await User.create(data);
@@ -41,6 +43,23 @@ exports.createUserTokens = (userId) => {
   const refreshToken = generateRefreshToken();
 
   return { accessToken, refreshToken };
+};
+
+exports.createAdmin = async (data, currentUserAdminRole) => {
+  const notAuthorizedError = ApiError.notAuthorized();
+
+  const isCurrentUserAdminRole = currentUserAdminRole === ADMIN_ROLES.admin;
+  const isDataAdminOrSuperadmin =
+    data.role === ADMIN_ROLES.admin || data.role === ADMIN_ROLES.superadmin;
+
+  if (isCurrentUserAdminRole && isDataAdminOrSuperadmin) {
+    throw notAuthorizedError;
+  }
+
+  const admin = await Admin.create({ ...data, password: '12345678' });
+  admin.password = undefined;
+
+  return admin;
 };
 
 function generateAccessToken(payload) {
