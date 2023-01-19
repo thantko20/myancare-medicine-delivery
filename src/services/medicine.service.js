@@ -18,17 +18,22 @@ const medicineService = {
       //     },
       //   },
       // ],
-      ...(req.query.name && {
-        name: {
-          $regex: req.query.name,
-          $options: 'i',
-        },
-      }),
-      ...(req.query.category && {
-        category: {
-          $regex: req.query.category,
-          $options: 'i',
-        },
+      //===================
+      // ...(req.query.name && {
+      //   name: {
+      //     $regex: req.query.name,
+      //     $options: 'i',
+      //   },
+      // }),
+      // ...(req.query.category && {
+      //   category: {
+      //     $regex: req.query.category,
+      //     $options: 'i',
+      //   },
+      // }),
+
+      ...(req.query.isInstock && {
+        isInstock: req.query.isInstock,
       }),
     };
 
@@ -36,11 +41,10 @@ const medicineService = {
     if (req.params.categoryId) filter = { category: req.params.categoryId };
 
     const features = new APIFeatures(Medicine.find(filter), req.query)
-      .filter(customFilter)
+      .filter()
       .sort()
       .limitFields()
       .paginate();
-    // const doc = await features.query.explain();
     const result = await features.query;
     const medicine = await result;
     return medicine;

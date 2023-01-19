@@ -1,8 +1,8 @@
 const categoryController = require('../controllers/category.controller');
 const router = require('express').Router();
-const medicineRouter = require('../');
+const medicineRouter = require('../routes/medicineRoutes');
 
-router.use('/:categoryId/medicines');
+router.use('/:categoryId/medicines', medicineRouter);
 
 router
   .route('/')

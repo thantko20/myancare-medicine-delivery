@@ -1,416 +1,418 @@
-[{
-  "_id": {
-    "$oid": "63c81f561fcf7d86b3cfdd0c"
+[
+  {
+    "_id": {
+      "$oid": "63c81f561fcf7d86b3cfdd0c"
+    },
+    "name": "Fluza 4tablets",
+    "price": 700,
+    "category": "general medicine",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "Can be used for colds, flu, headaches, and stuffy noses. Dosage - Three times per day.",
+    "quantity": 37,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1767139200000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674059606067"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087361948"
+      }
+    },
+    "__v": 0
   },
-  "name": "Fluza 4tablets",
-  "price": 700,
-  "category": "general medicine",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "Can be used for colds, flu, headaches, and stuffy noses. Dosage - Three times per day.",
-  "countInstock": 37,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1767139200000"
-    }
+  {
+    "_id": {
+      "$oid": "63c821339808c3cc4f79c33d"
+    },
+    "name": "Nokole 500 4tablets",
+    "price": 400,
+    "category": "general medicine",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "Can be used for colds, flu, headaches, and stuffy noses. Dosage - Three times per day.",
+    "quantity": 12,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674060083585"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087346963"
+      }
+    },
+    "__v": 0
   },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674059606067"
-    }
+  {
+    "_id": {
+      "$oid": "63c821c89808c3cc4f79c33f"
+    },
+    "name": "Mixagrip Peppermint Lozenges Original Flavour 15G",
+    "price": 1300,
+    "category": "general medicine",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "Can be used for sore throat and bronchitis. Dosage - Can be used as needed.",
+    "quantity": 55,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674060232030"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087338369"
+      }
+    },
+    "__v": 0
   },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087361948"
-    }
+  {
+    "_id": {
+      "$oid": "63c8224d9808c3cc4f79c341"
+    },
+    "name": "Sayar Kho",
+    "price": 1700,
+    "category": "traditional medicine",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "Can be used for stitches. Dosage - Can be used as needed.",
+    "quantity": 25,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674060365075"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087323836"
+      }
+    },
+    "__v": 0
   },
-  "__v": 0,
-  "isStock": true
-},{
-  "_id": {
-    "$oid": "63c821339808c3cc4f79c33d"
+  {
+    "_id": {
+      "$oid": "63c822729808c3cc4f79c343"
+    },
+    "name": "Yote Pyo Nerve Tonic",
+    "price": 1900,
+    "category": "traditional medicine",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "Can be used for weak nervous system. Dosage - (3)to(5) pills once (twice a day).",
+    "quantity": 10,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674060402312"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087312151"
+      }
+    },
+    "__v": 0
   },
-  "name": "Nokole 500 4tablets",
-  "price": 400,
-  "category": "general medicine",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "Can be used for colds, flu, headaches, and stuffy noses. Dosage - Three times per day.",
-  "countInstock": 12,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
+  {
+    "_id": {
+      "$oid": "63c823739808c3cc4f79c347"
+    },
+    "name": "Hiruscar Silicone Pro Medical Scar Care 4G",
+    "price": 19800,
+    "category": "skin treatment medicine",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "For surgical scars, keloid scars, old scars. Dosage - Can be used 2 times per day.",
+    "quantity": 30,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674060659448"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087299103"
+      }
+    },
+    "__v": 0
   },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674060083585"
-    }
+  {
+    "_id": {
+      "$oid": "63c8242e9808c3cc4f79c349"
+    },
+    "name": "Hiruscar Cream 7g",
+    "price": 13500,
+    "category": "skin treatment medicine",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "For scars, inflammation of blood vessel wall caused by blood clots in the blood vessel wall, hematoma, swelling of leg veins. Dosage - Can be used 1 to 2 times a day.",
+    "quantity": 7,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674060846199"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087286336"
+      }
+    },
+    "__v": 0
   },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087346963"
-    }
+  {
+    "_id": {
+      "$oid": "63c824e99808c3cc4f79c34b"
+    },
+    "name": "V.Rohto Dryeye Drops 13ML",
+    "price": 4500,
+    "category": "eye, ear, nasal medicine",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "For dry eyes, itchy eyes and eyes discomfort due to contact lens. Dosage - Can apply (1)(2) drops 3-4 times a day.",
+    "quantity": 19,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674061033422"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087273926"
+      }
+    },
+    "__v": 0
   },
-  "__v": 0,
-  "isStock": true
-},{
-  "_id": {
-    "$oid": "63c821c89808c3cc4f79c33f"
+  {
+    "_id": {
+      "$oid": "63c825f29808c3cc4f79c34e"
+    },
+    "name": "Brand`S Essence of chicken with Gs X-Tra Herb 42MLx6",
+    "price": 15700,
+    "category": "health drinks",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "For people who are tired all day, students who want to focus more on their studies and elderly people. Dosage - Can be taken as needed.",
+    "quantity": 75,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674061298459"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087257407"
+      }
+    },
+    "__v": 0
   },
-  "name": "Mixagrip Peppermint Lozenges Original Flavour 15G",
-  "price": 1300,
-  "category": "general medicine",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "Can be used for sore throat and bronchitis. Dosage - Can be used as needed.",
-  "countInstock": 55,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
+  {
+    "_id": {
+      "$oid": "63c8267b9808c3cc4f79c350"
+    },
+    "name": "Brand`S Bird`S Nest With Golden Cordyceps 1.5Oz",
+    "price": 8500,
+    "category": "health drinks",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "Make the digestive system easier and nourishes the body, also help to improve immunity. Dosage - Can be taken as needed.",
+    "quantity": 22,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674061435971"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087213868"
+      }
+    },
+    "__v": 0
   },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674060232030"
-    }
+  {
+    "_id": {
+      "$oid": "63c88c43339b2388f4a72e09"
+    },
+    "name": "Testing medicine",
+    "price": 1300,
+    "category": "health drinks",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "Make the digestive system easier and nourishes the body, also help to improve immunity. Dosage - Can be taken as needed.",
+    "quantity": 0,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674087491116"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087491116"
+      }
+    },
+    "__v": 0
   },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087338369"
-    }
+  {
+    "_id": {
+      "$oid": "63c88c8c339b2388f4a72e0b"
+    },
+    "name": "Biogesic",
+    "price": 1700,
+    "category": "general medicine",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "Make the digestive system easier and nourishes the body, also help to improve immunity. Dosage - Can be taken as needed.",
+    "quantity": 0,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674087564087"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674087564087"
+      }
+    },
+    "__v": 0
   },
-  "__v": 0,
-  "isStock": true
-},{
-  "_id": {
-    "$oid": "63c8224d9808c3cc4f79c341"
-  },
-  "name": "Sayar Kho",
-  "price": 1700,
-  "category": "traditional medicine",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "Can be used for stitches. Dosage - Can be used as needed.",
-  "countInstock": 25,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
-  },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674060365075"
-    }
-  },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087323836"
-    }
-  },
-  "__v": 0,
-  "isStock": true
-},{
-  "_id": {
-    "$oid": "63c822729808c3cc4f79c343"
-  },
-  "name": "Yote Pyo Nerve Tonic",
-  "price": 1900,
-  "category": "traditional medicine",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "Can be used for weak nervous system. Dosage - (3)to(5) pills once (twice a day).",
-  "countInstock": 10,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
-  },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674060402312"
-    }
-  },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087312151"
-    }
-  },
-  "__v": 0,
-  "isStock": true
-},{
-  "_id": {
-    "$oid": "63c823739808c3cc4f79c347"
-  },
-  "name": "Hiruscar Silicone Pro Medical Scar Care 4G",
-  "price": 19800,
-  "category": "skin treatment medicine",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "For surgical scars, keloid scars, old scars. Dosage - Can be used 2 times per day.",
-  "countInstock": 30,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
-  },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674060659448"
-    }
-  },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087299103"
-    }
-  },
-  "__v": 0,
-  "isStock": true
-},{
-  "_id": {
-    "$oid": "63c8242e9808c3cc4f79c349"
-  },
-  "name": "Hiruscar Cream 7g",
-  "price": 13500,
-  "category": "skin treatment medicine",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "For scars, inflammation of blood vessel wall caused by blood clots in the blood vessel wall, hematoma, swelling of leg veins. Dosage - Can be used 1 to 2 times a day.",
-  "countInstock": 7,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
-  },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674060846199"
-    }
-  },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087286336"
-    }
-  },
-  "__v": 0,
-  "isStock": true
-},{
-  "_id": {
-    "$oid": "63c824e99808c3cc4f79c34b"
-  },
-  "name": "V.Rohto Dryeye Drops 13ML",
-  "price": 4500,
-  "category": "eye, ear, nasal medicine",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "For dry eyes, itchy eyes and eyes discomfort due to contact lens. Dosage - Can apply (1)(2) drops 3-4 times a day.",
-  "countInstock": 19,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
-  },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674061033422"
-    }
-  },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087273926"
-    }
-  },
-  "__v": 0,
-  "isStock": true
-},{
-  "_id": {
-    "$oid": "63c825f29808c3cc4f79c34e"
-  },
-  "name": "Brand`S Essence of chicken with Gs X-Tra Herb 42MLx6",
-  "price": 15700,
-  "category": "health drinks",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "For people who are tired all day, students who want to focus more on their studies and elderly people. Dosage - Can be taken as needed.",
-  "countInstock": 75,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
-  },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674061298459"
-    }
-  },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087257407"
-    }
-  },
-  "__v": 0,
-  "isStock": true
-},{
-  "_id": {
-    "$oid": "63c8267b9808c3cc4f79c350"
-  },
-  "name": "Brand`S Bird`S Nest With Golden Cordyceps 1.5Oz",
-  "price": 8500,
-  "category": "health drinks",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "Make the digestive system easier and nourishes the body, also help to improve immunity. Dosage - Can be taken as needed.",
-  "countInstock": 22,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
-  },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674061435971"
-    }
-  },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087213868"
-    }
-  },
-  "__v": 0,
-  "isStock": true
-},{
-  "_id": {
-    "$oid": "63c88c43339b2388f4a72e09"
-  },
-  "name": "Testing medicine",
-  "price": 1300,
-  "category": "health drinks",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "Make the digestive system easier and nourishes the body, also help to improve immunity. Dosage - Can be taken as needed.",
-  "countInstock": 0,
-  "isStock": false,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
-  },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674087491116"
-    }
-  },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087491116"
-    }
-  },
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "63c88c8c339b2388f4a72e0b"
-  },
-  "name": "Biogesic",
-  "price": 1700,
-  "category": "general medicine",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "Make the digestive system easier and nourishes the body, also help to improve immunity. Dosage - Can be taken as needed.",
-  "countInstock": 0,
-  "isStock": false,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
-  },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674087564087"
-    }
-  },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674087564087"
-    }
-  },
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "63c8b17081a565ba7bb479b8"
-  },
-  "name": "Paracetamol",
-  "price": 400,
-  "category": "general medicine",
-  "image": "imgimgimgggggg234f3939393",
-  "images": [
-    "imagesalooefef999",
-    "feifeifeive830230030",
-    "jfoefeod93uffefffjd3339393"
-  ],
-  "description": "Make the digestive system easier and nourishes the body, also help to improve immunity. Dosage - Can be taken as needed.",
-  "countInstock": 0,
-  "expiredDate": {
-    "$date": {
-      "$numberLong": "1766016000000"
-    }
-  },
-  "createdAt": {
-    "$date": {
-      "$numberLong": "1674097008230"
-    }
-  },
-  "updatedAt": {
-    "$date": {
-      "$numberLong": "1674097008230"
-    }
-  },
-  "__v": 0
-}]
+  {
+    "_id": {
+      "$oid": "63c8b17081a565ba7bb479b8"
+    },
+    "name": "Paracetamol",
+    "price": 400,
+    "category": "general medicine",
+    "image": "imgimgimgggggg234f3939393",
+    "images": [
+      "imagesalooefef999",
+      "feifeifeive830230030",
+      "jfoefeod93uffefffjd3339393"
+    ],
+    "description": "Make the digestive system easier and nourishes the body, also help to improve immunity. Dosage - Can be taken as needed.",
+    "quantity": 0,
+    "expiredDate": {
+      "$date": {
+        "$numberLong": "1766016000000"
+      }
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1674097008230"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1674097008230"
+      }
+    },
+    "__v": 0
+  }
+]

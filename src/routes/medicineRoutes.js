@@ -1,4 +1,4 @@
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 const medicineController = require('../controllers/medicine.controller');
 const { PAGE_LIMIT, DEFAULT_SORTING } = require('../constants');
 require('dotenv').config();

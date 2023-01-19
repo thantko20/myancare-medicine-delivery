@@ -27,7 +27,7 @@ const medicineSchema = new Schema(
       type: String,
       required: true,
     },
-    countInstock: {
+    quantity: {
       type: Number,
       required: true,
       min: 0,
@@ -47,7 +47,7 @@ const medicineSchema = new Schema(
 );
 
 medicineSchema.virtual('isInStock').get(function () {
-  return this.countInstock > 0;
+  return this.quantity > 0;
 });
 
 medicineSchema.pre(/^find/, function (next) {
