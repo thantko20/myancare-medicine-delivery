@@ -13,6 +13,13 @@ exports.registerUser = catchAsync(async (req, res, next) => {
   sendTokens(res, { accessToken, refreshToken, user });
 });
 
+exports.loginUser = catchAsync(async (req, res, next) => {
+  const user = await authService.loginUser(req.body);
+  const { accessToken, refreshToken } = authService.createUserTokens(user.id);
+
+  sendTokens(res, { accessToken, refreshToken, user });
+});
+
 function sendTokens(res, { accessToken, refreshToken, user }) {
   res.cookie('access_token', accessToken, {
     maxAge: ACCESS_TOKEN_EXPIRES * 1000,
