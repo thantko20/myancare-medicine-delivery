@@ -10,6 +10,11 @@ exports.PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 
 exports.ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 exports.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+// In seconds
+exports.ACCESS_TOKEN_EXPIRES =
+  process.env.NODE_ENV === 'production' ? 900 : 86400;
+exports.REFRESH_TOKEN_EXPIRES =
+  process.env.NODE_ENV === 'production' ? 86400 : 259200;
 
 exports.CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
 exports.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;

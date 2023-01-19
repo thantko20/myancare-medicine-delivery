@@ -14,13 +14,13 @@ exports.registerUser = catchAsync(async (req, res, next) => {
 });
 
 function sendTokens(res, { accessToken, refreshToken, user }) {
-  res.cookies('access_token', accessToken, {
+  res.cookie('access_token', accessToken, {
     maxAge: ACCESS_TOKEN_EXPIRES * 1000,
     httpOnly: true,
     secure: NODE_ENV === 'production',
   });
 
-  res.cookies('refresh_token', refreshToken, {
+  res.cookie('refresh_token', refreshToken, {
     maxAge: REFRESH_TOKEN_EXPIRES * 1000,
     httpOnly: true,
     secure: NODE_ENV === 'production',

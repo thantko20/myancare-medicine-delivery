@@ -15,8 +15,6 @@ const userSchema = new Schema(
       city: { type: String, required: true },
       country: { type: String, required: true },
     },
-    refreshToken: { type: String, select: false },
-    refreshTokenExpires: { type: String, select: false },
   },
   {
     timestamps: true,
