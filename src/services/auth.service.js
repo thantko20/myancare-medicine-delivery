@@ -9,6 +9,7 @@ const {
   ACCESS_TOKEN_EXPIRES,
   REFRESH_TOKEN_EXPIRES,
   ADMIN_ROLES,
+  NODE_ENV,
 } = require('../constants');
 const Admin = require('../models/admin.model');
 
@@ -48,12 +49,16 @@ exports.createUserTokens = (userId) => {
 exports.createAdmin = async (data, currentUserAdminRole) => {
   const notAuthorizedError = ApiError.notAuthorized();
 
-  const isCurrentUserAdminRole = currentUserAdminRole === ADMIN_ROLES.admin;
-  const isDataAdminOrSuperadmin =
-    data.role === ADMIN_ROLES.admin || data.role === ADMIN_ROLES.superadmin;
+  if (NODE_ENV === 'production') {
+    if (!currentUserAdminRole) throw notAuthorizedError;
 
-  if (isCurrentUserAdminRole && isDataAdminOrSuperadmin) {
-    throw notAuthorizedError;
+    const isCurrentUserAdminRole = currentUserAdminRole === ADMIN_ROLES.admin;
+    const isDataAdminOrSuperadmin =
+      data.role === ADMIN_ROLES.admin || data.role === ADMIN_ROLES.superadmin;
+
+    if (isCurrentUserAdminRole && isDataAdminOrSuperadmin) {
+      throw notAuthorizedError;
+    }
   }
 
   const admin = await Admin.create({ ...data, password: '12345678' });

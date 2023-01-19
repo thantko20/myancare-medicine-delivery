@@ -23,7 +23,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
 exports.createAdmin = catchAsync(async (req, res, next) => {
   const admin = await authService.createAdmin(req.body, req.user.role);
 
-  res.json({
+  res.status(201).json({
     code: 201,
     data: admin,
   });
