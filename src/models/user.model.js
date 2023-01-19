@@ -3,11 +3,23 @@ const bcrypt = require('bcrypt');
 
 const userSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, minLength: 2, maxLength: 50 },
     email: { type: String, unique: true, required: true },
-    password: { type: String, required: true, select: false },
+    password: {
+      type: String,
+      required: true,
+      select: false,
+      minLength: 6,
+      maxLength: 16,
+    },
     customerId: { type: String, unique: true },
-    phone: { type: String, unique: true, required: true },
+    phone: {
+      type: String,
+      unique: true,
+      required: true,
+      minLength: 6,
+      maxLength: 16,
+    },
     address: {
       zipcode: { type: String, required: true },
       street: { type: String, required: true },
