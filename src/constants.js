@@ -21,3 +21,12 @@ exports.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 exports.CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
 exports.CLOUDINARY_SECURE_DELIVERY_URL =
   process.env.CLOUDINARY_SECURE_DELIVERY_URL;
+
+exports.ADMIN_ROLES = {
+  superadmin: 'SUPERADMIN',
+  admin: 'ADMIN',
+  supervisor: 'SUPERVISOR',
+  operator: 'OPERATOR',
+};
+
+exports.ADMIN_ROLE_LIST = Object.values(this.ADMIN_ROLES);
