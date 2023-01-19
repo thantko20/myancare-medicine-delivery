@@ -10,3 +10,8 @@ exports.PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 
 exports.PAGE_LIMIT = '10';
 exports.DEFAULT_SORTING = '-createdAt';
+exports.CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+exports.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
+exports.CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
+exports.CLOUDINARY_SECURE_DELIVERY_URL =
+  process.env.CLOUDINARY_SECURE_DELIVERY_URL;
