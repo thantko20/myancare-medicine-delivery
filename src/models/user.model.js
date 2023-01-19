@@ -49,6 +49,6 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-const userModel = model('User', userSchema);
+const User = model('User', userSchema);
 
-module.exports = userModel;
+module.exports = User;
