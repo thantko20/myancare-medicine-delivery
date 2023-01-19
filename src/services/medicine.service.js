@@ -2,7 +2,7 @@ const Medicine = require('../models/medicine.model');
 const APIFeatures = require('../utils/apiFeatures');
 
 const medicineService = {
-  getAllMedicines: async (reqQuery) => {
+  getAllMedicines: async (req) => {
     const customFilter = {
       // $or: [
       //   {
@@ -18,20 +18,24 @@ const medicineService = {
       //     },
       //   },
       // ],
-      ...(reqQuery.name && {
+      ...(req.query.name && {
         name: {
-          $regex: reqQuery.name,
+          $regex: req.query.name,
           $options: 'i',
         },
       }),
-      ...(reqQuery.category && {
+      ...(req.query.category && {
         category: {
-          $regex: reqQuery.category,
+          $regex: req.query.category,
           $options: 'i',
         },
       }),
     };
-    const features = new APIFeatures(Medicine.find(), reqQuery)
+
+    let filter = {};
+    if (req.params.categoryId) filter = { category: req.params.categoryId };
+
+    const features = new APIFeatures(Medicine.find(filter), req.query)
       .filter(customFilter)
       .sort()
       .limitFields()

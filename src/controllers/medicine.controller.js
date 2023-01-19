@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const apiError = require('../utils/apiError');
 
 exports.getAllMedicines = catchAsync(async (req, res, next) => {
-  const medicines = await medicineService.getAllMedicines(req.query);
+  const medicines = await medicineService.getAllMedicines(req);
   res.status(200).json({
     data: {
       totalCount: medicines.length,

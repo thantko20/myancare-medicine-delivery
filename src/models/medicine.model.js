@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, default: mongoose } = require('mongoose');
 
 const medicineSchema = new Schema(
   {
@@ -12,7 +12,8 @@ const medicineSchema = new Schema(
       required: true,
     },
     category: {
-      type: String,
+      type: mongoose.Schema.ObjectId,
+      ref: 'Category',
       required: true,
     },
     image: {
@@ -47,6 +48,14 @@ const medicineSchema = new Schema(
 
 medicineSchema.virtual('isInStock').get(function () {
   return this.countInstock > 0;
+});
+
+medicineSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'category',
+    select: 'text',
+  });
+  next();
 });
 
 const Medicine = model('Medicine', medicineSchema);
