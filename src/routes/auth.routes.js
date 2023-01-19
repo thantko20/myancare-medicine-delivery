@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 const authController = require('../controllers/auth.controller');
 const validate = require('../middlewares/validate');
+const loginUserSchema = require('../schemas/loginUserSchema');
 const registerUserSchema = require('../schemas/registerUserSchema');
 
 router.post(
@@ -10,6 +11,6 @@ router.post(
   authController.registerUser
 );
 
-router.post('/login', authController.loginUser);
+router.post('/login', validate(loginUserSchema), authController.loginUser);
 
 module.exports = router;
