@@ -8,6 +8,9 @@ exports.NODE_ENV = process.env.NODE_ENV || 'development';
 exports.MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 exports.PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 
+exports.PAGE_LIMIT = 10;
+exports.DEFAULT_SORTING = '-createdAt';
+
 exports.CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
 exports.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 exports.CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;

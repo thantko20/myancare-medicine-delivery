@@ -16,6 +16,6 @@ const hashPassword = async function (next) {
 
 userSchema.pre('save', hashPassword);
 
-const userModel = model('User', userSchema);
+const User = model('User', userSchema);
 
-module.exports = userModel;
+module.exports = User;
