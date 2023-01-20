@@ -2,14 +2,12 @@ const { faker } = require('@faker-js/faker');
 
 const seedData = require('./seedData');
 const User = require('../models/user.model');
-const Medicine = require('../models/medicine.model');
-const getRandomElementFromArray = require('../utils/getRandomElementFromArray');
 
 const seedUsers = async () => {
   return await seedData({
-    model: userModel,
+    model: User,
     generateDoc: () =>
-      new userModel({
+      new User({
         _id: faker.database.mongodbObjectId(),
         name: faker.name.fullName(),
         email: faker.internet.email(),
