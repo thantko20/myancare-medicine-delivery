@@ -69,3 +69,21 @@ exports.signRefreshToken = (payload) => {
     );
   });
 };
+
+exports.verifyRefreshToken = (refreshToken) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, async (error, decoded) => {
+      if (error) reject(ApiError.notAuthenticated());
+
+      const { userId, userType } = decoded;
+      const model = modelWithTypes[userType];
+      if (!model) reject(ApiError.notAuthorized());
+
+      const user = await model.findById(userId);
+
+      if (!user) reject(ApiError.badRequest());
+
+      resolve({ user, userType });
+    });
+  });
+};

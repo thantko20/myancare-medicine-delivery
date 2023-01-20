@@ -34,7 +34,7 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
 });
 
 exports.refreshAccessToken = catchAsync(async (req, res, next) => {
-  const accessToken = await authService.validateRefreshToken(
+  const accessToken = await authService.refreshAccessToken(
     req.cookies.refresh_token
   );
   res.cookie('access_token', accessToken, {
