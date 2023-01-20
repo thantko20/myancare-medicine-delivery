@@ -6,24 +6,16 @@ const {
   REFRESH_TOKEN_EXPIRES,
 } = require('../constants');
 
-exports.registerUser = catchAsync(async (req, res, next) => {
-  const user = await authService.registerUser(req.body);
-  const { accessToken, refreshToken } = authService.createUserTokens(
-    user.id,
-    'customer'
-  );
+exports.registerCustomer = catchAsync(async (req, res, next) => {
+  const payload = await authService.registerCustomer(req.body);
 
-  sendTokens(res, { accessToken, refreshToken, user });
+  sendTokens(res, payload);
 });
 
-exports.loginUser = catchAsync(async (req, res, next) => {
-  const user = await authService.loginUser(req.body);
-  const { accessToken, refreshToken } = authService.createUserTokens(
-    user.id,
-    'customer'
-  );
+exports.loginCustomer = catchAsync(async (req, res, next) => {
+  const payload = await authService.loginCustomer(req.body);
 
-  sendTokens(res, { accessToken, refreshToken, user });
+  sendTokens(res, payload);
 });
 
 exports.createAdmin = catchAsync(async (req, res, next) => {
@@ -36,13 +28,9 @@ exports.createAdmin = catchAsync(async (req, res, next) => {
 });
 
 exports.loginAdmin = catchAsync(async (req, res, next) => {
-  const admin = await authService.loginAdmin(req.body);
-  const { accessToken, refreshToken } = authService.createUserTokens(
-    admin.id,
-    'admin'
-  );
+  const payload = await authService.loginAdmin(req.body);
 
-  sendTokens(res, { accessToken, refreshToken, user: admin });
+  sendTokens(res, payload);
 });
 
 exports.refreshAccessToken = catchAsync(async (req, res, next) => {

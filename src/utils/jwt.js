@@ -3,7 +3,12 @@ const jwt = require('jsonwebtoken');
 const ApiError = require('./apiError');
 const Admin = require('../models/admin.model');
 const User = require('../models/user.model');
-const { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRES } = require('../constants');
+const {
+  ACCESS_TOKEN_SECRET,
+  ACCESS_TOKEN_EXPIRES,
+  REFRESH_TOKEN_SECRET,
+  REFRESH_TOKEN_EXPIRES,
+} = require('../constants');
 
 const modelWithTypes = {
   admin: Admin,
@@ -42,7 +47,24 @@ exports.verifyAccessToken = (accessToken) => {
       const user = await model.findById(userId);
 
       if (!user) return reject(ApiError.badRequest());
-      resolve(user);
+      resolve({ user, userType });
     });
+  });
+};
+
+exports.signRefreshToken = (payload) => {
+  return new Promise((resolve, reject) => {
+    jwt.sign(
+      payload,
+      REFRESH_TOKEN_SECRET,
+      { expiresIn: REFRESH_TOKEN_EXPIRES },
+      (error, token) => {
+        if (error) {
+          reject(error);
+        }
+
+        resolve(token);
+      }
+    );
   });
 };

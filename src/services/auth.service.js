@@ -9,20 +9,27 @@ const {
   ACCESS_TOKEN_EXPIRES,
   REFRESH_TOKEN_EXPIRES,
   ADMIN_ROLES,
+  USER_TYPES,
 } = require('../constants');
 const Admin = require('../models/admin.model');
+const { signAccessToken, signRefreshToken } = require('../utils/jwt');
 
-exports.registerUser = async (data) => {
+exports.registerCustomer = async (data) => {
   const user = await User.create(data);
   user.password = undefined;
   if (!user) {
     throw ApiError.badRequest('There was an error during registering.');
   }
 
-  return user;
+  const tokens = await signTokens({
+    userId: user.id,
+    userType: USER_TYPES.customer,
+  });
+
+  return { user, ...tokens };
 };
 
-exports.loginUser = async ({ email, password }) => {
+exports.loginCustomer = async ({ email, password }) => {
   const loginError = ApiError.badRequest('Invalid credentials.');
   const user = await User.findOne({ email }).select('+password');
   if (!user) throw loginError;
@@ -32,7 +39,12 @@ exports.loginUser = async ({ email, password }) => {
 
   user.password = undefined;
 
-  return user;
+  const tokens = await signTokens({
+    userId: user.id,
+    userType: USER_TYPES.customer,
+  });
+
+  return { user, ...tokens };
 };
 
 exports.createUserTokens = (userId, userType) => {
@@ -75,7 +87,12 @@ exports.loginAdmin = async ({ email, password }) => {
 
   admin.password = undefined;
 
-  return admin;
+  const tokens = await signTokens({
+    userId: admin.id,
+    userType: USER_TYPES.admin,
+  });
+
+  return { user: admin, ...tokens };
 };
 
 exports.validateRefreshToken = (token) => {
@@ -123,4 +140,12 @@ function generateRefreshToken(payload = {}) {
 async function comparePasswords(plainText, encrypted) {
   const isValid = await bcrypt.compare(plainText, encrypted);
   return isValid;
+}
+
+async function signTokens(payload) {
+  const accessToken = await signAccessToken(payload);
+
+  const refreshToken = await signRefreshToken(payload);
+
+  return { accessToken, refreshToken };
 }
