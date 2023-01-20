@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const { ADMIN_ROLES } = require('../constants');
 const authController = require('../controllers/auth.controller');
-const autheticate = require('../middlewares/autheticate');
+const autheticate = require('../middlewares/authenticate');
 const {
   restrictUserTypes,
   restrictAdmins,
