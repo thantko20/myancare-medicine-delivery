@@ -28,5 +28,10 @@ exports.ADMIN_ROLES = {
   supervisor: 'SUPERVISOR',
   operator: 'OPERATOR',
 };
-
 exports.ADMIN_ROLE_LIST = Object.values(this.ADMIN_ROLES);
+
+exports.USER_TYPES = {
+  customer: 'customer',
+  admin: 'admin',
+};
+exports.USER_TYPE_LIST = Object.values(this.USER_TYPES);
