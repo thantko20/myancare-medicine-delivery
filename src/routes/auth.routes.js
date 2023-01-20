@@ -9,6 +9,7 @@ const {
 } = require('../middlewares/authorize');
 const validate = require('../middlewares/validate');
 const createAdminSchema = require('../schemas/createAdminSchema');
+const loginAdminSchema = require('../schemas/loginAdminSchema');
 const loginUserSchema = require('../schemas/loginUserSchema');
 const registerUserSchema = require('../schemas/registerUserSchema');
 
@@ -20,7 +21,11 @@ router.post(
 
 router.post('/login', validate(loginUserSchema), authController.loginCustomer);
 
-router.post('/login/admin', authController.loginAdmin);
+router.post(
+  '/login/admin',
+  validate(loginAdminSchema),
+  authController.loginAdmin
+);
 
 router.post('/refresh-token', authController.refreshAccessToken);
 
