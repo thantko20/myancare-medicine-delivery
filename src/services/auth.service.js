@@ -9,7 +9,6 @@ const {
   ACCESS_TOKEN_EXPIRES,
   REFRESH_TOKEN_EXPIRES,
   ADMIN_ROLES,
-  NODE_ENV,
 } = require('../constants');
 const Admin = require('../models/admin.model');
 
