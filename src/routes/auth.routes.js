@@ -19,6 +19,15 @@ router.post(
   authController.registerCustomer
 );
 
+router.post(
+  '/register/admin',
+  validate(createAdminSchema),
+  autheticate,
+  restrictUserTypes('admin'),
+  restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
+  authController.createAdmin
+);
+
 router.post('/login', validate(loginUserSchema), authController.loginCustomer);
 
 router.post(
@@ -28,14 +37,5 @@ router.post(
 );
 
 router.post('/refresh-token', authController.refreshAccessToken);
-
-router.post(
-  '/create-admin',
-  validate(createAdminSchema),
-  autheticate,
-  restrictUserTypes('admin'),
-  restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
-  authController.createAdmin
-);
 
 module.exports = router;
