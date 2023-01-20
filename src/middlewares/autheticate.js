@@ -9,9 +9,10 @@ const autheticate = catchAsync(async (req, res, next) => {
     return next(ApiError.notAuthenticated());
   }
 
-  const user = await verifyAccessToken(accessToken);
+  const { user, userType } = await verifyAccessToken(accessToken);
 
   req.user = user;
+  req.userType = userType;
   next();
 });
 
