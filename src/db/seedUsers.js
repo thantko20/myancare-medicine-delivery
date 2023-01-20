@@ -1,7 +1,9 @@
 const { faker } = require('@faker-js/faker');
 
 const seedData = require('./seedData');
-const userModel = require('../models/user.model');
+const User = require('../models/user.model');
+const Medicine = require('../models/medicine.model');
+const getRandomElementFromArray = require('../utils/getRandomElementFromArray');
 
 const seedUsers = async () => {
   return await seedData({
@@ -25,4 +27,4 @@ const seedUsers = async () => {
   });
 };
 
-module.exports = seedUsers;
+module.exports = { seedUsers };

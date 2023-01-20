@@ -15,6 +15,9 @@ exports.ACCESS_TOKEN_EXPIRES =
   process.env.NODE_ENV === 'production' ? 900 : 86400;
 exports.REFRESH_TOKEN_EXPIRES =
   process.env.NODE_ENV === 'production' ? 86400 : 259200;
+  
+exports.PAGE_LIMIT = 10;
+exports.DEFAULT_SORTING = '-createdAt';
 
 exports.CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
 exports.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;

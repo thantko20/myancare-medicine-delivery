@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const seedUsers = require('./seedUsers');
 const { MONGODB_URI, NODE_ENV } = require('../constants');
