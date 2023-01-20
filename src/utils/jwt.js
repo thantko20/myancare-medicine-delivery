@@ -8,11 +8,12 @@ const {
   ACCESS_TOKEN_EXPIRES,
   REFRESH_TOKEN_SECRET,
   REFRESH_TOKEN_EXPIRES,
+  USER_TYPES,
 } = require('../constants');
 
 const modelWithTypes = {
-  admin: Admin,
-  user: User,
+  [USER_TYPES.admin]: Admin,
+  [USER_TYPES.customer]: User,
 };
 
 exports.signAccessToken = (payload) => {
