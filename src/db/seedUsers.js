@@ -10,10 +10,18 @@ const seedUsers = async () => {
     model: userModel,
     generateDoc: () =>
       new userModel({
+        _id: faker.database.mongodbObjectId(),
         name: faker.name.fullName(),
         email: faker.internet.email(),
         password: '12345678',
-        _id: faker.database.mongodbObjectId(),
+        phone: faker.phone.number(),
+        address: {
+          zipcode: faker.address.zipCode(),
+          street: faker.address.street(),
+          state: faker.address.state(),
+          city: faker.address.city(),
+          country: faker.address.country(),
+        },
       }),
     size: 100,
   });
