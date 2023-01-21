@@ -1,9 +1,8 @@
-const dotenv = require('dotenv');
+require('dotenv').config();
 const { MONGODB_URI } = require('../constants');
 const Medicine = require('../models/medicine.model');
-const { default: mongoose } = require('mongoose');
+const mongoose = require('mongoose');
 const fs = require('fs');
-dotenv.config({ path: './config.env' });
 
 const medicines = JSON.parse(
   fs.readFileSync(`${__dirname}/medicines.json`, 'utf-8')
@@ -13,6 +12,7 @@ const start = async () => {
   try {
     await mongoose.connect(MONGODB_URI);
     await Medicine.deleteMany();
+    console.log('Deleted well');
     await Medicine.create(medicines);
     console.log('Data are imported successfully!');
     process.exit(0);

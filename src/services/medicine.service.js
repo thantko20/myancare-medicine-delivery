@@ -3,50 +3,106 @@ const APIFeatures = require('../utils/apiFeatures');
 
 const medicineService = {
   getAllMedicines: async (req) => {
-    const customFilter = {
-      // $or: [
-      //   {
-      //     name: {
-      //       $regex: reqQuery.name,
-      //       $options: 'i',
-      //     },
-      //   },
-      //   {
-      //     category: {
-      //       $regex: reqQuery.category,
-      //       $options: 'i',
-      //     },
-      //   },
-      // ],
-      //===================
-      // ...(req.query.name && {
-      //   name: {
-      //     $regex: req.query.name,
-      //     $options: 'i',
-      //   },
-      // }),
-      // ...(req.query.category && {
-      //   category: {
-      //     $regex: req.query.category,
-      //     $options: 'i',
-      //   },
-      // }),
+    let customFilter = [
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category_details',
+        },
+      },
+      {
+        $unwind: '$category_details',
+      },
+      // searching medicines on category and name
+      {
+        $match: {
+          $or: [
+            {
+              name: {
+                $regex: req.query.search || '',
+                $options: 'i',
+              },
+            },
+            {
+              'category_details.text': {
+                $regex: req.query.search || '',
+                $options: 'i',
+              },
+            },
+          ],
+        },
+      },
+    ];
 
-      ...(req.query.isInstock && {
-        isInstock: req.query.isInstock,
-      }),
+    // searching medicines with category
+    if (req.query.category) {
+      customFilter.push({
+        $match: {
+          'category_details.text': req.query.category,
+        },
+      });
+    }
+
+    // cheking outofstock items
+    const quantityFilter = {
+      ...(req.query.outOfStock === 'true' ? { $lte: 0 } : { $gt: 0 }),
     };
+    if (req.query.outOfStock) {
+      customFilter.push({
+        $match: {
+          quantity: quantityFilter,
+        },
+      });
+    }
 
-    let filter = {};
-    if (req.params.categoryId) filter = { category: req.params.categoryId };
+    // sorting
+    if (req.query.sort_by && req.query.sort_order) {
+      let sort = {};
+      sort[req.query.sort_by] = req.query.sort_order === 'ascending' ? 1 : -1;
+      customFilter.push({
+        $sort: sort,
+      });
+    } else {
+      customFilter.push({
+        $sort: {
+          createdAt: -1,
+        },
+      });
+    }
 
-    const features = new APIFeatures(Medicine.find(filter), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const result = await features.query;
-    const medicine = await result;
+    // pagination
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 100;
+    const skip = (page - 1) * limit;
+    customFilter.push(
+      {
+        $skip: skip,
+      },
+      {
+        $limit: limit,
+      }
+    );
+
+    // console.log('customFilter', customFilter);
+    // customFilter = {name: {$regex......}, category: {$regex...}}
+
+    /////////////pls ignore this two lines for a moment
+    // let filter = {};
+    // if (req.params.categoryId) filter = { category: req.params.categoryId };
+    /////////////
+
+    const result = await Medicine.aggregate(customFilter);
+    const medicine = result.map(
+      ({ quantity, updatedAt, category, __v, ...rest }) => {
+        return {
+          ...rest,
+          outOfStock: quantity <= 0,
+        };
+      }
+    );
+
     return medicine;
   },
   getMedicine: async (medicineId) => {

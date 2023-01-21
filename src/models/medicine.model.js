@@ -46,17 +46,17 @@ const medicineSchema = new Schema(
   }
 );
 
-medicineSchema.virtual('isInStock').get(function () {
-  return this.quantity > 0;
+medicineSchema.virtual('outOfStock').get(function () {
+  return this.quantity === 0;
 });
 
-medicineSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'category',
-    select: 'text',
-  });
-  next();
-});
+// medicineSchema.pre(/^find/, function (next) {
+//   this.populate({
+//     path: 'category',
+//     select: 'text',
+//   });
+//   next();
+// });
 
 const Medicine = model('Medicine', medicineSchema);
 
