@@ -24,7 +24,10 @@ exports.getMedicine = catchAsync(async (req, res, next) => {
 });
 
 exports.createMedicine = catchAsync(async (req, res, next) => {
-  const newMedicine = await medicineService.createMedicine(req.body);
+  console.log('req.body-------->', req.body);
+  console.log('req.files-------->', req.files[1].path);
+
+  const newMedicine = await medicineService.createMedicine(req);
   res.json({
     data: {
       code: 200,

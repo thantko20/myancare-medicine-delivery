@@ -3,11 +3,21 @@ const medicineController = require('../controllers/medicine.controller');
 const defaultPagination = require('../middlewares/defaultPagination');
 const validate = require('../middlewares/validate');
 const medicineSchema = require('../schemas/medicineSchema');
+const {
+  upload,
+  uploadMedicineImages,
+  asStringImages,
+} = require('../lib/multer');
 
 router
   .route('/')
   .get(defaultPagination, medicineController.getAllMedicines)
-  .post(validate(medicineSchema), medicineController.createMedicine);
+  .post(
+    // validate(medicineSchema),
+    uploadMedicineImages,
+    asStringImages,
+    medicineController.createMedicine
+  );
 
 router
   .route('/:id')

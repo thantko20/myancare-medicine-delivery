@@ -16,13 +16,13 @@ const medicineSchema = new Schema(
       ref: 'Category',
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
     images: {
       type: [String],
+      required: true,
     },
+    // images: {
+    //   type: [String],
+    // },
     description: {
       type: String,
       required: true,

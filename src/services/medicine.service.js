@@ -103,7 +103,7 @@ const medicineService = {
     /////////////pls ignore this two lines for a moment/////////
     // let filter = {};
     // if (req.params.categoryId) filter = { category: req.params.categoryId };
-    ////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////
 
     const result = await Medicine.aggregate(customFilter);
     const medicine = result.map(
@@ -121,8 +121,8 @@ const medicineService = {
     const medicine = await Medicine.findById(medicineId);
     return medicine;
   },
-  createMedicine: async (reqBody) => {
-    const newMedicine = await Medicine.create(reqBody);
+  createMedicine: async (req) => {
+    const newMedicine = await Medicine.create(req.body);
     newMedicine.save({
       validateBeforeSave: false,
     });
