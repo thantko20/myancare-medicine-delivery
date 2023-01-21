@@ -85,13 +85,25 @@ const medicineService = {
       }
     );
 
+    // Expired Filter
+    if (req.query.startDate && req.query.endDate) {
+      customFilter.push({
+        $match: {
+          expiredDate: {
+            $gte: new Date(req.query.startDate).toISOString(),
+            $lte: new Date(req.query.endDate).toISOString(),
+          },
+        },
+      });
+    }
+
     // console.log('customFilter', customFilter);
     // customFilter = {name: {$regex......}, category: {$regex...}}
 
-    /////////////pls ignore this two lines for a moment
+    /////////////pls ignore this two lines for a moment/////////
     // let filter = {};
     // if (req.params.categoryId) filter = { category: req.params.categoryId };
-    /////////////
+    ////////////////////////////////////////////////////////////
 
     const result = await Medicine.aggregate(customFilter);
     const medicine = result.map(
