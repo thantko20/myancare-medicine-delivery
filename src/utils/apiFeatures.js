@@ -24,10 +24,8 @@ class APIFeatures {
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
     console.log('-->', { ...JSON.parse(queryStr), ...customFilter });
-    // if (customFilter) {
-    //   this.query = this.query.find(customFilter);
-    // }
-    this.query = this.query.aggregate([JSON.parse(queryStr), ...customFilter]);
+
+    this.query = this.query.find({ ...JSON.parse(queryStr), ...customFilter });
 
     return this;
   }

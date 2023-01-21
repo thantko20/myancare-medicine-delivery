@@ -54,7 +54,10 @@ exports.updateMedicine = catchAsync(async (req, res, next) => {
 
 exports.updateQuantity = catchAsync(async (req, res, next) => {
   if (!req.body.quantity) {
-    throw ApiError('This route is only for medicine quantities update.', 400);
+    throw new ApiError(
+      'This route is only for medicine quantities update.',
+      400
+    );
   }
   const medicine = await medicineService.updateQuantity(req.params.id, {
     quantity: req.body.quantity,
