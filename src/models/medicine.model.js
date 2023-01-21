@@ -35,8 +35,8 @@ const medicineSchema = new Schema(
       // select: false,
     },
     expiredDate: {
-      type: Date,
-      default: new Date('2025-12-18').toISOString(),
+      type: String,
+      // default: new Date('2025-12-18').toISOString(),
     },
   },
   {

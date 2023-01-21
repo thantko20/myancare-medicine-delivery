@@ -30,7 +30,13 @@ const medicineSchema = [
   body('quantity')
     .isNumeric()
     .withMessage('Instock items quantity must be number.'),
-  // body('expiredDate').isDate().withMessage('Expired Date must be a date.'),
+  body('expiredDate')
+    .isString()
+
+    .withMessage('Expired Date must be a date.')
+    .customSanitizer(async (value) => {
+      return new Date(value).toISOString();
+    }),
 ];
 
 module.exports = medicineSchema;
