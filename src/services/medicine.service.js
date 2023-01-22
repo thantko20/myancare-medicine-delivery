@@ -123,9 +123,6 @@ const medicineService = {
   },
   createMedicine: async (req) => {
     const newMedicine = await Medicine.create(req.body);
-    newMedicine.save({
-      validateBeforeSave: false,
-    });
     return newMedicine;
   },
   updateMedicine: async (medicineId, reqBody) => {
