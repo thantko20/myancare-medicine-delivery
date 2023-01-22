@@ -42,8 +42,8 @@ const orderSchema = new Schema({
     default: 'Pending',
   },
   user: {
-    type: String,
-    // ref: 'User',
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
 });

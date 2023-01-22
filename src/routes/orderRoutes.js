@@ -20,4 +20,8 @@ router
 
 router.route('/:id').patch(orderController.handlingOrdersStatus);
 
+router
+  .route('/:userId/orderHistory')
+  .get(defaultPagination, orderController.getAllOrders);
+
 module.exports = router;

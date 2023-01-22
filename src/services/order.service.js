@@ -27,7 +27,7 @@ const orderService = {
   },
   getOrder: async (orderId) => {
     const order = await Order.findById(orderId)
-      // .populate('user', 'name')
+      .populate('user', 'name')
       .populate({
         path: 'orderItems',
         populate: {
@@ -49,16 +49,6 @@ const orderService = {
     );
     const totalPrice = totalPrices.reduce((a, b) => a + b, 0);
 
-    // orderItems: orderItemsIdsResolved,
-    //     shippingAddress1: req.body.shippingAddress1,
-    //     shippingAddress2: req.body.shippingAddress2,
-    //     city: req.body.city,
-    //     zip: req.body.zip,
-    //     country: req.body.country,
-    //     phone: req.body.phone,
-    //     status: req.body.status,
-    //     totalPrice: totalPrice,
-    //     user: req.body.user,
     const newOrder = await Order.create({ total: totalPrice, ...req.body });
     return newOrder;
   },
