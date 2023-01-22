@@ -4,18 +4,49 @@ const defaultPagination = require('../middlewares/defaultPagination');
 const validate = require('../middlewares/validate');
 const medicineSchema = require('../schemas/medicineSchema');
 const { uploadMedicineImages, toStoreAsStr } = require('../lib/multer');
+const {
+  restrictUserTypes,
+  restrictAdmins,
+} = require('../middlewares/authorize');
+const autheticate = require('../middlewares/authenticate');
+const { ADMIN_ROLES } = require('../constants');
 
 router
   .route('/')
   .get(defaultPagination, medicineController.getAllMedicines)
-  .post(validate(medicineSchema), medicineController.createMedicine);
+  .post(
+    validate(medicineSchema),
+    autheticate,
+    restrictUserTypes('admin'),
+    restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
+    medicineController.createMedicine
+  );
 
 router
   .route('/:id')
   .get(medicineController.getMedicine)
-  .patch(uploadMedicineImages, toStoreAsStr, medicineController.updateMedicine)
-  .delete(medicineController.deleteMedicine);
+  .patch(
+    autheticate,
+    restrictUserTypes('admin'),
+    restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
+    uploadMedicineImages,
+    toStoreAsStr,
+    medicineController.updateMedicine
+  )
+  .delete(
+    autheticate,
+    restrictUserTypes('admin'),
+    restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
+    medicineController.deleteMedicine
+  );
 
-router.route('/:id/updateQuantity').patch(medicineController.updateQuantity);
+router
+  .route('/:id/updateQuantity')
+  .patch(
+    autheticate,
+    restrictUserTypes('admin'),
+    restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
+    medicineController.updateQuantity
+  );
 
 module.exports = router;
