@@ -20,7 +20,7 @@ const medicineSchema = [
     }),
   body('price').isNumeric().withMessage('Price must be a number.'),
   body('category').isMongoId().withMessage('Category must be mongo id.'),
-  body('images.*').isString().withMessage('All images must be string url.'),
+  body('images').isString().withMessage('All images must be string url.'),
 
   body('description')
     .isString()
@@ -31,8 +31,7 @@ const medicineSchema = [
     .withMessage('Instock items quantity must be number.'),
   body('expiredDate')
     .isString()
-    .isEmpty()
-    .withMessage('Expired Date must be a date.')
+    .withMessage('Expired Date must be a date format string. ')
     .customSanitizer(async (value) => {
       return new Date(value).toISOString();
     }),

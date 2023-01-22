@@ -1,5 +1,4 @@
 const multer = require('multer');
-
 const ApiError = require('../utils/apiError');
 const cloudinary = require('../lib/cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
@@ -35,12 +34,12 @@ const upload = multer({
 
 const uploadMedicineImages = upload.array('images', 2);
 
-const asStringImages = catchAsync(async (req, res, next) => {
+const toStoreAsStr = catchAsync(async (req, res, next) => {
   if (!req.files) return next();
 
   req.body.images = [];
   await Promise.all(
-    req.files.map((file) => {
+    req.files.map(async (file) => {
       const filename = `${file.path}`;
       req.body.images.push(filename);
     })
@@ -51,5 +50,5 @@ const asStringImages = catchAsync(async (req, res, next) => {
 module.exports = {
   upload,
   uploadMedicineImages,
-  asStringImages,
+  toStoreAsStr,
 };
