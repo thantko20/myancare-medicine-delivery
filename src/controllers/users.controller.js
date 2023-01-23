@@ -14,11 +14,6 @@ exports.getMe = (req, res, next) => {
   if (!req.user) return next(ApiError.badRequest());
 
   sendSuccessResponse({ res, data: req.user });
-
-  res.json({
-    code: 200,
-    data: req.user,
-  });
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
