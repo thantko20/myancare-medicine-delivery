@@ -4,27 +4,14 @@ class APIFeatures {
     this.queryString = queryString;
   }
 
-  filter(customFilter) {
+  filter(customFilter = {}) {
     const queryObj = { ...this.queryString };
 
-    // queryObj.quantity = queryObj.outOfStock === 'true' ? { lte: 0 } : { gt: 0 };
-    // delete queryObj['outOfStock'];
-
-    const excludedFields = [
-      'page',
-      'sort',
-      'limit',
-      'fields',
-      'outOfStock',
-      'search',
-    ];
+    const excludedFields = ['page', 'sort', 'limit', 'fields', 'status'];
     excludedFields.forEach((el) => delete queryObj[el]);
 
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-
-    console.log('-->', { ...JSON.parse(queryStr), ...customFilter });
-
     this.query = this.query.find({ ...JSON.parse(queryStr), ...customFilter });
 
     return this;
