@@ -1,9 +1,9 @@
+/* eslint-disable no-console */
 const mongoose = require('mongoose');
-const { faker } = require('@faker-js/faker');
-const bcrypt = require('bcrypt');
+require('dotenv').config();
 
-const { MONGODB_URI } = require('../constants');
-const userModel = require('../models/user.model');
+const seedUsers = require('./seedUsers');
+const { MONGODB_URI, NODE_ENV } = require('../constants');
 
 mongoose.set('strictQuery', false);
 mongoose
@@ -12,33 +12,34 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log('Connection to MongoDB established.'));
+  .then(() => {
+    console.log('Connection to MongoDB established.');
+    console.log('🌱 Seeding....');
+    seed()
+      .then(() => console.log('✅ Successfully seeded.'))
+      .catch((error) => {
+        console.log(error.message);
+        console.log('❌ Seeding failed.');
+      })
+      .finally(() => {
+        mongoose.disconnect().then(() => {
+          process.exit(1);
+        });
+      });
+  });
 
-const userPassword = bcrypt.hashSync('12345678', 12);
-
-const users = Array(10)
-  .fill()
-  .map((item) => ({
-    name: faker.name.fullName(),
-    email: faker.internet.email(),
-    password: userPassword,
-    _id: faker.database.mongodbObjectId(),
-  }));
-
-const seedUsers = async () => {
-  await userModel.deleteMany({});
-  const dbUsers = await userModel.insertMany(users);
-  return dbUsers;
+const dropCollections = async () => {
+  const collections = mongoose.connection.collections;
+  await Promise.all(
+    Object.values(collections).map(async (collection) => {
+      await collection.deleteMany({});
+    })
+  );
 };
 
 async function seed() {
-  console.log('Seeding....');
-  const dbUsers = await seedUsers();
+  if (NODE_ENV === 'production')
+    throw Error('Seeding should not be done in production mode.');
+  await dropCollections();
+  const users = await seedUsers();
 }
-
-seed()
-  .then(() => console.log('Successfully seeded.'))
-  .finally(() => {
-    mongoose.disconnect();
-    console.log('Closed MongoDB');
-  });
