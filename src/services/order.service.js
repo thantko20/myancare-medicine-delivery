@@ -58,7 +58,7 @@ const orderService = {
     if (!order) throw ApiError.notFound();
 
     const orderStatus = order.status;
-    if (orderStatus === 'Pending') {
+    if (orderStatus === 'Pending' && statusText !== 'Cancelled') {
       const updatedOrder = await Order.findByIdAndUpdate(
         orderId,
         { status: statusText },
@@ -79,7 +79,32 @@ const orderService = {
       );
       return updatedOrder;
     } else {
-      throw new ApiError('You cannot cancel on accepted process.', 400);
+      throw new ApiError(
+        'You are using wrong end point for cancelling or you cannot cancel on accepted process.',
+        400
+      );
+    }
+  },
+  cancelOrder: async (orderId, statusText) => {
+    const order = await Order.findById(orderId);
+    if (!order) throw ApiError.notFound();
+
+    const orderStatus = order.status;
+    if (orderStatus === 'Pending' && statusText === 'Cancelled') {
+      const updatedOrder = await Order.findByIdAndUpdate(
+        orderId,
+        { status: statusText },
+        {
+          runValidators: true,
+          new: true,
+        }
+      );
+      return updatedOrder;
+    } else {
+      throw new ApiError(
+        'You are using wrong end point for cancelling or you cannot cancel on accepted process.',
+        400
+      );
     }
   },
 };
