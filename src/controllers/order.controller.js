@@ -1,36 +1,21 @@
 const orderService = require('../services/order.service');
 const catchAsync = require('../utils/catchAsync');
 const ApiError = require('../utils/apiError');
+const sendSuccessResponse = require('../utils/sendSucessResponse');
 
 exports.getAllOrders = catchAsync(async (req, res, next) => {
   const orders = await orderService.getAllOrders(req);
-  res.json({
-    data: {
-      code: 200,
-      data: orders,
-      count: orders.length,
-    },
-  });
+  sendSuccessResponse({ res, code: 200, data: orders });
 });
 
 exports.getOrder = catchAsync(async (req, res, next) => {
   const order = await orderService.getOrder(req.params.id);
-  res.json({
-    data: {
-      code: 200,
-      data: order,
-    },
-  });
+  sendSuccessResponse({ res, code: 200, data: order });
 });
 
 exports.createOrder = catchAsync(async (req, res, next) => {
   const newOrder = await orderService.createOrder(req);
-  res.json({
-    data: {
-      code: 200,
-      data: newOrder,
-    },
-  });
+  sendSuccessResponse({ res, code: 200, data: newOrder });
 });
 
 // exports.updateOrder = catchAsync(async (req, res, next) => {
@@ -45,10 +30,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 
 exports.deleteOrder = catchAsync(async (req, res, next) => {
   await orderService.deleteOrder(req.params.id);
-  res.json({
-    code: 200,
-    data: null,
-  });
+  sendSuccessResponse({ res, code: 200, data: null });
 });
 
 exports.handlingOrdersStatus = catchAsync(async (req, res, next) => {
@@ -59,10 +41,5 @@ exports.handlingOrdersStatus = catchAsync(async (req, res, next) => {
     req.params.id,
     req.body.status
   );
-  res.json({
-    data: {
-      code: 200,
-      data: updatedOrder,
-    },
-  });
+  sendSuccessResponse({ res, code: 200, data: updatedOrder });
 });
