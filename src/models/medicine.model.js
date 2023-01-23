@@ -17,10 +17,12 @@ const medicineSchema = new Schema(
       required: true,
     },
     images: {
-      type: [{
-        filename: String,
-        url: {type: String, required: true}
-      }],
+      type: [
+        {
+          filename: String,
+          url: String,
+        },
+      ],
     },
     description: {
       type: String,

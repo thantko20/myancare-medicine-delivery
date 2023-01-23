@@ -121,8 +121,15 @@ const medicineService = {
     const medicine = await Medicine.findById(medicineId);
     return medicine;
   },
-  createMedicine: async (req) => {
-    const newMedicine = await Medicine.create(req.body);
+  createMedicine: async (data, images) => {
+    const imagesWithUrls = images.map((img) => ({
+      filename: img.filename,
+      url: img.path,
+    }));
+    const newMedicine = await Medicine.create({
+      ...data,
+      images: imagesWithUrls,
+    });
     return newMedicine;
   },
   updateMedicine: async (medicineId, reqBody) => {

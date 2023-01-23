@@ -3,7 +3,7 @@ const medicineController = require('../controllers/medicine.controller');
 const defaultPagination = require('../middlewares/defaultPagination');
 const validate = require('../middlewares/validate');
 const medicineSchema = require('../schemas/medicineSchema');
-const { uploadMedicineImages, toStoreAsStr } = require('../lib/multer');
+const { uploadMedicineImages, toStoreAsStr, upload } = require('../lib/multer');
 const {
   restrictUserTypes,
   restrictAdmins,
@@ -15,10 +15,11 @@ router
   .route('/')
   .get(defaultPagination, medicineController.getAllMedicines)
   .post(
-    validate(medicineSchema),
     autheticate,
     restrictUserTypes('admin'),
     restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
+    upload.array('images'),
+    validate(medicineSchema),
     medicineController.createMedicine
   );
 
@@ -29,8 +30,6 @@ router
     autheticate,
     restrictUserTypes('admin'),
     restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
-    uploadMedicineImages,
-    toStoreAsStr,
     medicineController.updateMedicine
   )
   .delete(
