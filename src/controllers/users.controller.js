@@ -1,7 +1,7 @@
 const userService = require('../services/users.service');
 const ApiError = require('../utils/apiError');
 const catchAsync = require('../utils/catchAsync');
-const sendSuccessResponse = require('../utils/sendSucessResponse');
+const sendSuccessResponse = require('../utils/sendSuccessResponse');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   req.query.password = undefined;
