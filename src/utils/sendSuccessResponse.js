@@ -1,4 +1,4 @@
-const sendSucessResponse = ({ res, code = 200, data = {} }) => {
+const sendSuccessResponse = ({ res, code = 200, data = {} }) => {
   res.status(code).json({
     code,
     data,
@@ -6,4 +6,4 @@ const sendSucessResponse = ({ res, code = 200, data = {} }) => {
   });
 };
 
-module.exports = sendSucessResponse;
+module.exports = sendSuccessResponse;

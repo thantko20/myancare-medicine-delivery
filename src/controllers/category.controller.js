@@ -1,6 +1,6 @@
 const categoryService = require('../services/category.service');
 const catchAsync = require('../utils/catchAsync');
-const sendSuccessResponse = require('../utils/sendSucessResponse');
+const sendSuccessResponse = require('../utils/sendSuccessResponse');
 
 exports.getAllCategories = catchAsync(async (req, res, next) => {
   const categories = await categoryService.getAllCategories(req.query);

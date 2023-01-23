@@ -52,13 +52,7 @@ const orderService = {
     const newOrder = await Order.create({ total: totalPrice, ...req.body });
     return newOrder;
   },
-  // updateOrder: async (orderId, reqBody) => {
-  //   const updatedorder = await Order.findByIdAndUpdate(orderId, reqBody, {
-  //     runValidators: true,
-  //     new: true,
-  //   });
-  //   return updatedorder;
-  // },
+
   handlingOrdersStatus: async (orderId, statusText) => {
     const order = await Order.findById(orderId);
     if (!order) throw ApiError.notFound();
@@ -87,9 +81,6 @@ const orderService = {
     } else {
       throw new ApiError('You cannot cancel on accepted process.', 400);
     }
-  },
-  deleteOrder: async (orderId) => {
-    await Order.findByIdAndDelete(orderId);
   },
 };
 

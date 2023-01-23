@@ -1,7 +1,7 @@
 const medicineService = require('../services/medicine.service');
 const catchAsync = require('../utils/catchAsync');
 const ApiError = require('../utils/apiError');
-const sendSuccessResponse = require('../utils/sendSucessResponse');
+const sendSuccessResponse = require('../utils/sendSuccessResponse');
 
 exports.getAllMedicines = catchAsync(async (req, res, next) => {
   const medicines = await medicineService.getAllMedicines(req);
