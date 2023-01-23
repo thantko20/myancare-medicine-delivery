@@ -24,7 +24,7 @@ exports.getMedicine = catchAsync(async (req, res, next) => {
 });
 
 exports.createMedicine = catchAsync(async (req, res, next) => {
-  const newMedicine = await medicineService.createMedicine(req.body);
+  const newMedicine = await medicineService.createMedicine(req);
   res.json({
     data: {
       code: 200,

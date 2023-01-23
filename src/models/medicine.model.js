@@ -16,10 +16,6 @@ const medicineSchema = new Schema(
       ref: 'Category',
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
     images: {
       type: [String],
     },
