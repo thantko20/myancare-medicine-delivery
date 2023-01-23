@@ -27,3 +27,16 @@ exports.getUserById = async (id) => {
 
   return user;
 };
+
+exports.updateUser = async (id, data) => {
+  // eslint-disable-next-line no-unused-vars
+  const { password, ...filteredData } = data;
+  const updatedUser = await User.findByIdAndUpdate(id, filteredData, {
+    new: true,
+  });
+
+  if (!updatedUser) {
+    throw ApiError.badRequest();
+  }
+  return updatedUser;
+};
