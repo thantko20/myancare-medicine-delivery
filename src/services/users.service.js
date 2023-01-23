@@ -1,4 +1,5 @@
 const User = require('../models/user.model');
+const ApiError = require('../utils/apiError');
 const ApiFeatures = require('../utils/apiFeatures');
 
 exports.getAllUsers = async (query) => {
@@ -16,4 +17,13 @@ exports.getAllUsers = async (query) => {
   const users = await usersQuery.query;
 
   return users;
+};
+
+exports.getUserById = async (id) => {
+  const user = await User.findById(id);
+  if (!user) {
+    throw ApiError.badRequest();
+  }
+
+  return user;
 };
