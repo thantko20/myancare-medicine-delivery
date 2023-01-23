@@ -1,7 +1,6 @@
 const userService = require('../services/users.service');
 const ApiError = require('../utils/apiError');
 const catchAsync = require('../utils/catchAsync');
-const sendSucessResponse = require('../utils/sendSucessResponse');
 const sendSuccessResponse = require('../utils/sendSucessResponse');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
@@ -29,7 +28,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   const updatedUser = await userService.updateUser(req.user.id, req.body);
 
-  sendSucessResponse({ res, code: 201, data: updatedUser });
+  sendSuccessResponse({ res, code: 201, data: updatedUser });
 });
 
 exports.getUserById = catchAsync(async (req, res, next) => {
@@ -41,5 +40,5 @@ exports.getUserById = catchAsync(async (req, res, next) => {
 exports.updateUser = catchAsync(async (req, res, next) => {
   const updatedUser = await userService.updateUser(req.params.id, req.body);
 
-  sendSucessResponse({ res, data: updatedUser, code: 201 });
+  sendSuccessResponse({ res, data: updatedUser, code: 201 });
 });

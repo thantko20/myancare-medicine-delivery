@@ -2,7 +2,6 @@ const router = require('express').Router();
 
 const { USER_TYPES, ADMIN_ROLES } = require('../constants');
 const userController = require('../controllers/users.controller');
-const autheticate = require('../middlewares/authenticate');
 const authenticate = require('../middlewares/authenticate');
 const {
   restrictUserTypes,
@@ -33,7 +32,7 @@ router.patch(
 
 router.get(
   '/:id',
-  autheticate,
+  authenticate,
   restrictUserTypes(USER_TYPES.admin),
   restrictAdmins(),
   userController.getUserById
@@ -41,7 +40,7 @@ router.get(
 
 router.patch(
   '/:id',
-  autheticate,
+  authenticate,
   restrictUserTypes(USER_TYPES.admin),
   restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
   userController.updateUser
