@@ -24,6 +24,14 @@ exports.getMe = (req, res, next) => {
   });
 };
 
+exports.updateMe = catchAsync(async (req, res, next) => {
+  if (!req.user) return next(ApiError.badRequest());
+
+  const updatedUser = await userService.updateUser(req.user.id, req.body);
+
+  sendSucessResponse({ res, code: 201, data: updatedUser });
+});
+
 exports.getUserById = catchAsync(async (req, res, next) => {
   const user = await userService.getUserById(req.params.id);
 

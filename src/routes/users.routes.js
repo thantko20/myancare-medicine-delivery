@@ -24,6 +24,13 @@ router.get(
   userController.getMe
 );
 
+router.patch(
+  '/me',
+  authenticate,
+  restrictUserTypes(USER_TYPES.customer),
+  userController.updateMe
+);
+
 router.get(
   '/:id',
   autheticate,
