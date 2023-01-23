@@ -1,18 +1,13 @@
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 const medicineController = require('../controllers/medicine.controller');
-const { PAGE_LIMIT, DEFAULT_SORTING } = require('../constants');
-require('dotenv').config();
-
-const firstAllMedicines = (req, res, next) => {
-  req.query.limit = PAGE_LIMIT;
-  req.query.sort = DEFAULT_SORTING;
-  next();
-};
+const defaultPagination = require('../middlewares/defaultPagination');
+const validate = require('../middlewares/validate');
+const medicineSchema = require('../schemas/medicineSchema');
 
 router
   .route('/')
-  .get(firstAllMedicines, medicineController.getAllMedicines)
-  .post(medicineController.createMedicine);
+  .get(defaultPagination, medicineController.getAllMedicines)
+  .post(validate(medicineSchema), medicineController.createMedicine);
 
 router
   .route('/:id')

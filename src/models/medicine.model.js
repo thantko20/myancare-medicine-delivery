@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, default: mongoose } = require('mongoose');
 
 const medicineSchema = new Schema(
   {
@@ -12,7 +12,8 @@ const medicineSchema = new Schema(
       required: true,
     },
     category: {
-      type: String,
+      type: mongoose.Schema.ObjectId,
+      ref: 'Category',
       required: true,
     },
     image: {
@@ -26,33 +27,35 @@ const medicineSchema = new Schema(
       type: String,
       required: true,
     },
-    countInstock: {
+    quantity: {
       type: Number,
       required: true,
       min: 0,
       max: 599,
-      select: false,
+      // select: false,
     },
     expiredDate: {
-      type: Date,
-      default: new Date('2025-12-18').toISOString(),
+      type: String,
+      // default: new Date('2025-12-18').toISOString(),
     },
   },
   {
     timestamps: true,
-  },
-  {
-    toJSON: {
-      virtuals: true,
-    },
-    toObject: {
-      virtuals: true,
-    },
+    toJSON: { virtuals: true },
+    toObject: { virtual: true },
   }
 );
 
-medicineSchema.virtual('isInStock').get(function () {
-  return this.countInstock > 0;
+medicineSchema.virtual('outOfStock').get(function () {
+  return this.quantity === 0;
+});
+
+medicineSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'category',
+    select: 'text -_id',
+  });
+  next();
 });
 
 const Medicine = model('Medicine', medicineSchema);

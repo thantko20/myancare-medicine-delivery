@@ -18,7 +18,6 @@ exports.REFRESH_TOKEN_EXPIRES =
 
 exports.PAGE_LIMIT = 10;
 exports.DEFAULT_SORTING = '-createdAt';
-
 exports.CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
 exports.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 exports.CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
