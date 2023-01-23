@@ -42,3 +42,7 @@ exports.updateUser = async (id, data) => {
   }
   return updatedUser;
 };
+
+exports.deleteUser = async (id) => {
+  await User.findByIdAndDelete(id);
+};
