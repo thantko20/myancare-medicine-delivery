@@ -18,7 +18,7 @@ router
     autheticate,
     restrictUserTypes('admin'),
     restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
-    upload.array('images'),
+    upload.array('images', 2),
     validate(medicineSchema),
     medicineController.createMedicine
   );
