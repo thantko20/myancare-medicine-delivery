@@ -46,4 +46,12 @@ router.patch(
   userController.updateUser
 );
 
+router.delete(
+  '/:id',
+  authenticate,
+  restrictUserTypes(USER_TYPES.admin),
+  restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
+  userController.deleteUser
+);
+
 module.exports = router;

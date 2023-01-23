@@ -35,3 +35,9 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 
   sendSuccessResponse({ res, data: updatedUser, code: 201 });
 });
+
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  await userService.deleteUser(req.params.id);
+
+  sendSuccessResponse({ res, code: 204 });
+});
