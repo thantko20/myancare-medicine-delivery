@@ -1,31 +1,27 @@
-[{
-  "_id": {
-    "$oid": "63c90823b07e77292c0d3dab"
+[
+  {
+    "_id": "63c90823b07e77292c0d3dab",
+    "text": "traditional medicine",
+    "__v": 0
   },
-  "text": "traditional medicine",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "63c90848b07e77292c0d3dae"
+  {
+    "_id": "63c90848b07e77292c0d3dae",
+    "text": "skin treatment medicine",
+    "__v": 0
   },
-  "text": "skin treatment medicine",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "63c908b5b07e77292c0d3db2"
+  {
+    "_id": "63c908b5b07e77292c0d3db2",
+    "text": "health drinks",
+    "__v": 0
   },
-  "text": "health drinks",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "63c90ae3b07e77292c0d3dbb"
+  {
+    "_id": "63c90ae3b07e77292c0d3dbb",
+    "text": "general fever medicine",
+    "__v": 0
   },
-  "text": "general fever medicine",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "63c9b744e7e2500dd0d21c70"
-  },
-  "text": "eye, ear, nasal medicine",
-  "__v": 0
-}]
+  {
+    "_id": "63c9b744e7e2500dd0d21c70",
+    "text": "eye, ear, nasal medicine",
+    "__v": 0
+  }
+]
