@@ -37,3 +37,8 @@ exports.USER_TYPES = {
   admin: 'admin',
 };
 exports.USER_TYPE_LIST = Object.values(this.USER_TYPES);
+
+exports.EMAIL_HOST = process.env.EMAIL_HOST;
+exports.EMAIL_PORT = process.env.EMAIL_PORT;
+exports.EMAIL_USERNAME = process.env.EMAIL_USERNAME;
+exports.EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
