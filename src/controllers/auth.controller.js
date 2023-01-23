@@ -1,5 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const authService = require('../services/auth.service');
+const emailService = require('../services/email.service');
 const {
   ACCESS_TOKEN_EXPIRES,
   NODE_ENV,
@@ -8,6 +9,10 @@ const {
 
 exports.registerCustomer = catchAsync(async (req, res, next) => {
   const payload = await authService.registerCustomer(req.body);
+
+  const user = payload.user;
+
+  await emailService.sendWelcomeMessageToUser({ to: user.email });
 
   sendTokens(res, payload);
 });
