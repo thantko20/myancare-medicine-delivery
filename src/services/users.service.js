@@ -30,8 +30,10 @@ exports.getUserById = async (id) => {
 
 exports.updateUser = async (id, data) => {
   // eslint-disable-next-line no-unused-vars
-  const { password, ...filteredData } = data;
-  const updatedUser = await User.findByIdAndUpdate(id, filteredData, {
+  if (data.password) {
+    throw ApiError.badRequest();
+  }
+  const updatedUser = await User.findByIdAndUpdate(id, data, {
     new: true,
   });
 
