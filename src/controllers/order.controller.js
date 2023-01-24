@@ -14,7 +14,7 @@ exports.getOrder = catchAsync(async (req, res, next) => {
 });
 
 exports.createOrder = catchAsync(async (req, res, next) => {
-  const newOrder = await orderService.createOrder(req);
+  const newOrder = await orderService.createOrder(req.body);
   sendSuccessResponse({ res, code: 200, data: newOrder });
 });
 
@@ -38,4 +38,12 @@ exports.cancelOrder = catchAsync(async (req, res, next) => {
     req.body.status
   );
   sendSuccessResponse({ res, code: 200, data: updatedOrder });
+});
+
+exports.getOrdersReports = catchAsync(async (req, res, next) => {
+  const reports = await orderService.getOrdersReport(req.query);
+
+  res.json({
+    data: reports,
+  });
 });

@@ -15,30 +15,30 @@ const orderService = {
     return orders;
   },
   getOrderById: async (orderId) => {
-    const order = await Order.findById(orderId)
-      .populate('user', 'name')
-      .populate({
-        path: 'orderItems',
-        populate: {
-          path: 'medicine',
-          select: 'name price category description',
-        },
-      });
+    const order = await Order.findById(orderId);
 
     return order;
   },
-  createOrder: async (req) => {
-    const totalPrices = await Promise.all(
-      req.body.orderItems.map(async (orderItem) => {
-        const orderItemId = orderItem.medicine;
-        const orderedMedicineItem = await Medicine.findById(orderItemId);
-        const totalPrice = orderedMedicineItem.price * orderItem.quantity;
-        return totalPrice;
-      })
-    );
-    const totalPrice = totalPrices.reduce((a, b) => a + b, 0);
+  createOrder: async (data) => {
+    // Check if medicine ids are valid
+    try {
+      data.orderItems = await Promise.all(
+        data.orderItems.map(async (item) => ({
+          ...item,
+          medicine: await Medicine.findById(item.medicine),
+        }))
+      );
+    } catch (error) {
+      throw ApiError.badRequest();
+    }
+    if (data.orderItems.some((item) => item.medicine.outOfStock)) {
+      throw ApiError.badRequest();
+    }
+    const total = data.orderItems
+      .map((item) => item.medicine.price)
+      .reduce((a, b) => a + b, 0);
 
-    const newOrder = await Order.create({ total: totalPrice, ...req.body });
+    const newOrder = await Order.create({ ...data, total });
     return newOrder;
   },
 
@@ -95,6 +95,99 @@ const orderService = {
         400
       );
     }
+  },
+  getOrdersReport: async (query) => {
+    const reports = await Order.aggregate([
+      {
+        $unwind: '$orderItems',
+      },
+      {
+        $lookup: {
+          from: 'medicines',
+          localField: 'orderItems.medicine',
+          foreignField: '_id',
+          as: 'orderItems.medicine',
+        },
+      },
+      {
+        $unwind: '$orderItems.medicine',
+      },
+      {
+        $group: {
+          _id: '$orderItems.medicine',
+          quantitySold: { $sum: '$orderItems.quantity' },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          medicineName: '$_id.name',
+          quantitySold: 1,
+          category: '$_id.category',
+          totalAmount: { $multiply: ['$_id.price', '$quantitySold'] },
+        },
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      {
+        $unwind: '$category',
+      },
+      {
+        $group: {
+          _id: '$category',
+          items: {
+            $push: {
+              name: '$medicineName',
+              quantitySold: '$quantitySold',
+              totalAmount: '$totalAmount',
+            },
+          },
+          quantitySold: { $sum: '$quantitySold' },
+          totalAmount: { $sum: '$totalAmount' },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          category: '$_id.text',
+          items: 1,
+          quantitySold: 1,
+          totalAmount: 1,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          categories: {
+            $push: {
+              name: '$category',
+              items: '$items',
+              quantitySold: '$quantitySold',
+              totalAmount: '$totalAmount',
+            },
+          },
+          totalAmount: { $sum: '$totalAmount' },
+          quantitySold: { $sum: '$quantitySold' },
+        },
+      },
+      {
+        $set: {
+          categories: {
+            $sortArray: {
+              input: '$categories',
+              sortBy: { totalAmount: -1 },
+            },
+          },
+        },
+      },
+    ]);
+    return reports;
   },
 };
 
