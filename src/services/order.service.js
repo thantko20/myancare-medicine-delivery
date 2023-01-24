@@ -2,7 +2,7 @@ const Order = require('../models/order.model');
 const Medicine = require('../models/medicine.model');
 const APIFeatures = require('../utils/apiFeatures');
 const ApiError = require('../utils/apiError');
-const { ORDER_STATUS } = require('../constants');
+const { ORDER_STATUS, ORDER_STATUS_LEVEL } = require('../constants');
 
 const orderService = {
   getAllOrders: async (query) => {
@@ -53,37 +53,30 @@ const orderService = {
     return newOrder;
   },
 
-  handlingOrdersStatus: async (orderId, statusText) => {
+  updateOrderStatus: async (orderId, newStatus) => {
+    if (newStatus === ORDER_STATUS.cancelled) {
+      throw ApiError.badRequest('Cannot cancel on this endpoint.');
+    }
     const order = await Order.findById(orderId);
-    if (!order) throw ApiError.notFound();
+    if (!order) throw ApiError.badRequest();
 
-    const orderStatus = order.status;
-    if (orderStatus === 'Pending' && statusText !== 'Cancelled') {
-      const updatedOrder = await Order.findByIdAndUpdate(
-        orderId,
-        { status: statusText },
-        {
-          runValidators: true,
-          new: true,
-        }
-      );
-      return updatedOrder;
-    } else if (orderStatus === 'Accepted' && statusText === 'Delivered') {
-      const updatedOrder = await Order.findByIdAndUpdate(
-        orderId,
-        { status: statusText },
-        {
-          runValidators: true,
-          new: true,
-        }
-      );
-      return updatedOrder;
-    } else {
-      throw new ApiError(
-        'You are using wrong end point for cancelling or you cannot cancel on accepted process.',
-        400
+    if (order.status === ORDER_STATUS.cancelled) {
+      throw ApiError.badRequest(
+        'Cannot update an order that has already been cancelled'
       );
     }
+
+    const orderStatusLevel = ORDER_STATUS_LEVEL[order.status];
+    const newOrderStatusLevel = ORDER_STATUS_LEVEL[newStatus];
+
+    if (newOrderStatusLevel - orderStatusLevel !== 1) {
+      throw ApiError.badRequest('Status must be updated step-by-step.');
+    }
+
+    order.status = newStatus;
+    const updatedOrder = await order.save();
+
+    return updatedOrder;
   },
   cancelOrder: async (orderId) => {
     const order = await Order.findById(orderId);

@@ -68,7 +68,8 @@ orderSchema.pre(/^find/, function (next) {
   next();
 });
 
-orderSchema.pre('save', async function () {
+orderSchema.pre('save', async function (next) {
+  if (!this.isNew) return next();
   const Medicine = this.constructor.model('Medicine');
   await Promise.all(
     this.orderItems.map(async (item) => {

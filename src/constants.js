@@ -52,10 +52,10 @@ exports.ORDER_STATUS = {
 };
 
 exports.ORDER_STATUS_LEVEL = {
-  0: this.ORDER_STATUS.pending,
-  1: this.ORDER_STATUS.confirmed,
-  2: this.ORDER_STATUS.delivering,
-  3: this.ORDER_STATUS.done,
+  [this.ORDER_STATUS.pending]: 0,
+  [this.ORDER_STATUS.confirmed]: 1,
+  [this.ORDER_STATUS.delivering]: 2,
+  [this.ORDER_STATUS.done]: 3,
 };
 
 exports.ORDER_STATUS_LIST = Object.values(this.ORDER_STATUS);
