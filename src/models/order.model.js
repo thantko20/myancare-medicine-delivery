@@ -1,5 +1,7 @@
 const { Schema, model, default: mongoose } = require('mongoose');
 
+const { ORDER_STATUS, ORDER_STATUS_LIST } = require('../constants');
+
 const orderSchema = new Schema(
   {
     orderItems: [
@@ -40,7 +42,8 @@ const orderSchema = new Schema(
     },
     status: {
       type: String,
-      default: 'Pending',
+      enum: ORDER_STATUS_LIST,
+      default: ORDER_STATUS.pending,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

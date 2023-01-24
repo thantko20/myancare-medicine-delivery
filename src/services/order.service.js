@@ -2,6 +2,7 @@ const Order = require('../models/order.model');
 const Medicine = require('../models/medicine.model');
 const APIFeatures = require('../utils/apiFeatures');
 const ApiError = require('../utils/apiError');
+const { ORDER_STATUS } = require('../constants');
 
 const orderService = {
   getAllOrders: async (query) => {
@@ -84,27 +85,23 @@ const orderService = {
       );
     }
   },
-  cancelOrder: async (orderId, statusText) => {
+  cancelOrder: async (orderId) => {
     const order = await Order.findById(orderId);
     if (!order) throw ApiError.notFound();
 
-    const orderStatus = order.status;
-    if (orderStatus === 'Pending' && statusText === 'Cancelled') {
-      const updatedOrder = await Order.findByIdAndUpdate(
-        orderId,
-        { status: statusText },
-        {
-          runValidators: true,
-          new: true,
-        }
-      );
-      return updatedOrder;
-    } else {
-      throw new ApiError(
-        'You are using wrong end point for cancelling or you cannot cancel on accepted process.',
-        400
-      );
+    if (order.status !== ORDER_STATUS.pending) {
+      throw ApiError.badRequest('Cannot cancel order after confirmation.');
     }
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      {
+        status: ORDER_STATUS.cancelled,
+      },
+      { new: true }
+    );
+
+    return updatedOrder;
   },
   getOrdersReport: async (query) => {
     let dateRangeFilter = {};

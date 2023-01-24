@@ -30,14 +30,8 @@ exports.handlingOrdersStatus = catchAsync(async (req, res, next) => {
 });
 
 exports.cancelOrder = catchAsync(async (req, res, next) => {
-  if (!req.body.status) {
-    throw new ApiError('This route is only for order cancelling', 400);
-  }
-  const updatedOrder = await orderService.cancelOrder(
-    req.params.id,
-    req.body.status
-  );
-  sendSuccessResponse({ res, code: 200, data: updatedOrder });
+  const updatedOrder = await orderService.cancelOrder(req.params.id);
+  sendSuccessResponse({ res, data: updatedOrder });
 });
 
 exports.getOrdersReports = catchAsync(async (req, res, next) => {
