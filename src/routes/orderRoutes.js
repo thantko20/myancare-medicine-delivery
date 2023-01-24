@@ -6,6 +6,7 @@ const orderSchema = require('../schemas/orderSchema');
 const { restrictUserTypes } = require('../middlewares/authorize');
 const authenticate = require('../middlewares/authenticate');
 
+router.get('/report', orderController.getOrdersReports);
 router
   .route('/')
   .get(
