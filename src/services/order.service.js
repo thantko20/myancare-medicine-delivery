@@ -4,20 +4,9 @@ const APIFeatures = require('../utils/apiFeatures');
 const ApiError = require('../utils/apiError');
 
 const orderService = {
-  getAllOrders: async (req) => {
-    // Filtering OrderStatus
-    let customFilter = {};
-    if (req.query.status)
-      customFilter = {
-        status: req.query.status,
-      };
-
-    // filtering user's order history only
-    let filter = {};
-    if (req.params.userId) filter = { user: req.params.userId };
-
-    const features = new APIFeatures(Order.find(filter), req.query)
-      .filter(customFilter)
+  getAllOrders: async (query) => {
+    const features = new APIFeatures(Order.find(), query)
+      .filter()
       .limitFields()
       .paginate()
       .sort();
