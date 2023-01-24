@@ -1,52 +1,57 @@
-const { Schema, model, default: mongoose, mongo } = require('mongoose');
+const { Schema, model, default: mongoose } = require('mongoose');
 
-const orderSchema = new Schema({
-  orderItems: [
-    {
-      medicine: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Medicine',
-        required: true,
+const orderSchema = new Schema(
+  {
+    orderItems: [
+      {
+        medicine: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Medicine',
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
       },
-      quantity: {
-        type: Number,
-        required: true,
-      },
+    ],
+    shippingAddress: {
+      type: String,
+      required: true,
     },
-  ],
-  shippingAddress: {
-    type: String,
-    required: true,
+    city: {
+      type: String,
+      required: true,
+    },
+    zipcode: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
+    total: {
+      type: Number,
+    },
+    status: {
+      type: String,
+      default: 'Pending',
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
-  city: {
-    type: String,
-    required: true,
-  },
-  zipcode: {
-    type: String,
-    required: true,
-  },
-  country: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-  },
-  total: {
-    type: Number,
-  },
-  status: {
-    type: String,
-    default: 'Pending',
-  },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 orderSchema.pre(/^find/, function (next) {
   this.populate('user', '-password -__v');
@@ -73,7 +78,6 @@ orderSchema.pre('save', async function () {
         },
         { new: true }
       );
-      console.log(medicine);
       return medicine;
     })
   );

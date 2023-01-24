@@ -1,5 +1,4 @@
 const Medicine = require('../models/medicine.model');
-const APIFeatures = require('../utils/apiFeatures');
 
 const medicineService = {
   getAllMedicines: async (req) => {
