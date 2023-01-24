@@ -1,4 +1,6 @@
-const nodemailer = require('nodemailer');
+const path = require('path');
+var nodemailer = require('nodemailer');
+var hbs = require('nodemailer-express-handlebars');
 
 const {
   EMAIL_HOST,
@@ -8,19 +10,32 @@ const {
 } = require('../constants');
 
 exports.sendMessage = async (messageConfiguration) => {
-  const transporter = createTransport();
+  let transporter = createTransport();
+  const viewpath = path.join(__dirname, '../views');
+
+  const handlebarOptions = {
+    viewEngine: {
+      defaultLayout: false,
+    },
+    viewPath: viewpath,
+  };
+  transporter.use('compile', hbs(handlebarOptions));
 
   await transporter.sendMail({
-    from: 'Myancare myancare.org.mm',
+    from: 'myancare.org.mm@',
     ...messageConfiguration,
   });
 };
 
-exports.sendWelcomeMessageToUser = async ({ to }) => {
+exports.sendWelcomeMessageToUser = async (to, name) => {
   await this.sendMessage({
-    to,
-    html: '<h1>Hello World</h1>',
+    to: to,
     subject: 'Welcome!',
+    text: 'Its really workinggg',
+    template: 'email',
+    context: {
+      userName: name,
+    },
   });
 };
 

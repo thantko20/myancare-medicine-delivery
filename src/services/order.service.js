@@ -1,12 +1,16 @@
 const Order = require('../models/order.model');
 const Medicine = require('../models/medicine.model');
+const User = require('../models/user.model');
 const APIFeatures = require('../utils/apiFeatures');
 const ApiError = require('../utils/apiError');
+
+const { sendWelcomeMessageToUser } = require('./email.service');
 
 const orderService = {
   getAllOrders: async (req) => {
     // Filtering OrderStatus
     let customFilter = {};
+
     if (req.query.status)
       customFilter = {
         status: req.query.status,
@@ -14,6 +18,7 @@ const orderService = {
 
     // filtering user's order history only
     let filter = {};
+
     if (req.params.userId) filter = { user: req.params.userId };
 
     const features = new APIFeatures(Order.find(filter), req.query)
@@ -21,8 +26,10 @@ const orderService = {
       .limitFields()
       .paginate()
       .sort();
+
     const result = await features.query;
     const orders = await result;
+
     return orders;
   },
   getOrder: async (orderId) => {
@@ -43,6 +50,9 @@ const orderService = {
       req.body.orderItems.map(async (orderItem) => {
         const orderItemId = orderItem.medicine;
         const orderedMedicineItem = await Medicine.findById(orderItemId);
+        if (orderedMedicineItem.quantity === 0) {
+          throw new ApiError('The medicine you ordered is out of stock.', 400);
+        }
         const totalPrice = orderedMedicineItem.price * orderItem.quantity;
         return totalPrice;
       })
@@ -50,6 +60,12 @@ const orderService = {
     const totalPrice = totalPrices.reduce((a, b) => a + b, 0);
 
     const newOrder = await Order.create({ total: totalPrice, ...req.body });
+    const user = await User.findById(req.body.user);
+    try {
+      await sendWelcomeMessageToUser(user.email, user.name);
+    } catch (err) {
+      throw new ApiError('There is something went wrong while ordering', 400);
+    }
     return newOrder;
   },
 

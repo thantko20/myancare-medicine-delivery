@@ -4,6 +4,7 @@ const ApiError = require('../utils/apiError');
 
 function sendApiError(error, res) {
   if (NODE_ENV !== 'production') console.log(error);
+
   res.status(error.statusCode).json({
     code: error.statusCode,
     message: error.message,
