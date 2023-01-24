@@ -21,6 +21,16 @@ const orderService = {
   },
   createOrder: async (data) => {
     // Check if medicine ids are valid
+    const medicines = await Promise.all(
+      data.orderItems.map(
+        async (item) => await Medicine.findById(item.medicine)
+      )
+    );
+    const canOrder = await checkStockStatus(data.orderItems, medicines);
+    if (!canOrder) {
+      throw ApiError.badRequest();
+    }
+
     try {
       data.orderItems = await Promise.all(
         data.orderItems.map(async (item) => ({
@@ -190,5 +200,26 @@ const orderService = {
     return reports;
   },
 };
+
+async function checkStockStatus(orderItems, medicines) {
+  if (medicines.some((medicine) => medicine.outOfStock)) {
+    return false;
+  }
+
+  if (
+    medicines.some((medicine) => {
+      const medicineId = medicine.id;
+      const orderItem = orderItems.find((item) => item.medicine === medicineId);
+      if (!orderItem || orderItem.quatity > medicine.quantity) {
+        return true;
+      }
+      return false;
+    })
+  ) {
+    return false;
+  }
+
+  return true;
+}
 
 module.exports = orderService;
