@@ -14,7 +14,7 @@ const orderService = {
     const orders = await result;
     return orders;
   },
-  getOrder: async (orderId) => {
+  getOrderById: async (orderId) => {
     const order = await Order.findById(orderId)
       .populate('user', 'name')
       .populate({

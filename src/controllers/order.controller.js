@@ -9,7 +9,7 @@ exports.getAllOrders = catchAsync(async (req, res, next) => {
 });
 
 exports.getOrder = catchAsync(async (req, res, next) => {
-  const order = await orderService.getOrder(req.params.id);
+  const order = await orderService.getOrderById(req.params.id);
   sendSuccessResponse({ res, code: 200, data: order });
 });
 
