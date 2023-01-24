@@ -4,7 +4,7 @@ const ApiError = require('../utils/apiError');
 const sendSuccessResponse = require('../utils/sendSuccessResponse');
 
 exports.getAllOrders = catchAsync(async (req, res, next) => {
-  const orders = await orderService.getAllOrders(req);
+  const orders = await orderService.getAllOrders(req.query);
   sendSuccessResponse({ res, code: 200, data: orders });
 });
 
