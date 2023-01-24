@@ -107,7 +107,19 @@ const orderService = {
     }
   },
   getOrdersReport: async (query) => {
+    let dateRangeFilter = {};
+    if (query.startDate && query.endDate) {
+      dateRangeFilter = {
+        createdAt: {
+          $gte: new Date(query.startDate),
+          $lte: new Date(query.endDate),
+        },
+      };
+    }
     const reports = await Order.aggregate([
+      {
+        $match: dateRangeFilter,
+      },
       {
         $unwind: '$orderItems',
       },
