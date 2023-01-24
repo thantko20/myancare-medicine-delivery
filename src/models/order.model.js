@@ -60,6 +60,25 @@ orderSchema.pre(/^find/, function (next) {
   next();
 });
 
+orderSchema.pre('save', async function () {
+  const Medicine = this.constructor.model('Medicine');
+  await Promise.all(
+    this.orderItems.map(async (item) => {
+      const medicine = await Medicine.findByIdAndUpdate(
+        item.medicine,
+        {
+          $inc: {
+            quantity: -item.quantity,
+          },
+        },
+        { new: true }
+      );
+      console.log(medicine);
+      return medicine;
+    })
+  );
+});
+
 const Order = model('Order', orderSchema);
 
 module.exports = Order;
