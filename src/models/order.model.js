@@ -48,6 +48,18 @@ const orderSchema = new Schema({
   },
 });
 
+orderSchema.pre(/^find/, function (next) {
+  this.populate('user', '-password -__v');
+  this.populate({
+    path: 'orderItems',
+    populate: {
+      path: 'medicine',
+      model: 'Medicine',
+    },
+  });
+  next();
+});
+
 const Order = model('Order', orderSchema);
 
 module.exports = Order;
