@@ -204,20 +204,21 @@ const orderService = {
 };
 
 async function checkStockStatus(orderItems, medicines) {
-  if (medicines.some((medicine) => medicine.outOfStock)) {
+  const isOutOfStock = medicines.some((medicine) => medicine.outOfStock);
+  if (isOutOfStock) {
     return false;
   }
 
-  if (
-    medicines.some((medicine) => {
-      const medicineId = medicine.id;
-      const orderItem = orderItems.find((item) => item.medicine === medicineId);
-      if (!orderItem || orderItem.quatity > medicine.quantity) {
-        return true;
-      }
-      return false;
-    })
-  ) {
+  const isOrderQuantityOverLimit = medicines.some((medicine) => {
+    const medicineId = medicine.id;
+    const orderItem = orderItems.find((item) => item.medicine === medicineId);
+    if (!orderItem || orderItem.quatity > medicine.quantity) {
+      return true;
+    }
+    return false;
+  });
+
+  if (isOrderQuantityOverLimit) {
     return false;
   }
 
