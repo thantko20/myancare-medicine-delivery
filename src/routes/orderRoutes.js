@@ -5,7 +5,9 @@ const validate = require('../middlewares/validate');
 const orderSchema = require('../schemas/orderSchema');
 const { restrictUserTypes } = require('../middlewares/authorize');
 const authenticate = require('../middlewares/authenticate');
+const { USER_TYPES } = require('../constants');
 
+router.get('/report', orderController.getOrdersReports);
 router
   .route('/')
   .get(
@@ -25,13 +27,12 @@ router
   .get(authenticate, restrictUserTypes('admin'), orderController.getOrder);
 
 // Order Status Changing / accept/delivered
-router
-  .route('/:id')
-  .patch(
-    authenticate,
-    restrictUserTypes('admin'),
-    orderController.handlingOrdersStatus
-  );
+router.route('/:id');
+// .patch(
+//   authenticate,
+//   restrictUserTypes('admin'),
+//   orderController.handlingOrdersStatus
+// );
 
 router
   .route('/:id/cancel')
@@ -46,5 +47,12 @@ router
     defaultPagination,
     orderController.getAllOrders
   );
+
+router.patch(
+  '/:id/status',
+  authenticate,
+  restrictUserTypes(USER_TYPES.admin),
+  orderController.updateOrderStatus
+);
 
 module.exports = router;
