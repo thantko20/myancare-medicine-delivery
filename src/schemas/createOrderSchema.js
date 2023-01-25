@@ -20,7 +20,8 @@ const createOrderSchema = [
     .isLength({ min: 6, max: 32 })
     .withMessage(
       'Phone number must have at least 6 characters and 16 characters long.'
-    ),
+    )
+    .optional(),
 ];
 
 module.exports = createOrderSchema;

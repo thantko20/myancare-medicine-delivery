@@ -3,7 +3,6 @@ const Medicine = require('../models/medicine.model');
 const APIFeatures = require('../utils/apiFeatures');
 const ApiError = require('../utils/apiError');
 const { ORDER_STATUS, ORDER_STATUS_LEVEL } = require('../constants');
-const User = require('../models/user.model');
 
 const orderService = {
   getAllOrders: async (query) => {
@@ -34,12 +33,13 @@ const orderService = {
 
     return orders;
   },
-  createOrder: async (data) => {
+  createOrder: async (data, user) => {
     // Check if medicine ids are valid
     if (typeof data.shippingAddress !== 'object') {
-      const user = await User.findById(data.user).select('address');
       data.shippingAddress = user.address;
     }
+
+    data.phone = data.phone || user.phone;
     const medicines = await Promise.all(
       data.orderItems.map(
         async (item) => await Medicine.findById(item.medicine)

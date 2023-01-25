@@ -14,7 +14,7 @@ exports.getOrder = catchAsync(async (req, res, next) => {
 });
 
 exports.createOrder = catchAsync(async (req, res, next) => {
-  const newOrder = await orderService.createOrder(req.body);
+  const newOrder = await orderService.createOrder(req.body, req.user);
   sendSuccessResponse({ res, code: 200, data: newOrder });
 });
 
