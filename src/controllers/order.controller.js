@@ -29,6 +29,12 @@ exports.updateOrderStatus = catchAsync(async (req, res, next) => {
   sendSuccessResponse({ res, data: updatedOrder });
 });
 
+exports.getMyOrders = catchAsync(async (req, res, next) => {
+  const orders = await orderService.getMyOrders(req.user.id, req.query);
+
+  sendSuccessResponse({ res, data: orders });
+});
+
 exports.cancelOrder = catchAsync(async (req, res, next) => {
   const updatedOrder = await orderService.cancelOrder(req.params.id);
   sendSuccessResponse({ res, data: updatedOrder });

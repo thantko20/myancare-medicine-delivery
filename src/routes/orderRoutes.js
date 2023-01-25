@@ -1,19 +1,21 @@
 const router = require('express').Router({ mergeParams: true });
 const orderController = require('../controllers/order.controller');
-const defaultPagination = require('../middlewares/defaultPagination');
 const { restrictUserTypes } = require('../middlewares/authorize');
 const authenticate = require('../middlewares/authenticate');
 const { USER_TYPES } = require('../constants');
 
 router.get('/report', orderController.getOrdersReports);
+
+router.get(
+  '/me',
+  authenticate,
+  restrictUserTypes(USER_TYPES.customer),
+  orderController.getMyOrders
+);
+
 router
   .route('/')
-  .get(
-    authenticate,
-    restrictUserTypes('admin'),
-    defaultPagination,
-    orderController.getAllOrders
-  )
+  .get(authenticate, restrictUserTypes('admin'), orderController.getAllOrders)
   .post(
     authenticate,
     restrictUserTypes('customer'),
@@ -22,21 +24,11 @@ router
 
 router
   .route('/:id')
-  .get(authenticate, restrictUserTypes('admin'), orderController.getOrder);
+  .get(authenticate, restrictUserTypes('both'), orderController.getOrder);
 
 router
   .route('/:id/cancel')
   .patch(authenticate, restrictUserTypes('both'), orderController.cancelOrder);
-
-// user's order-history after he ordered
-router
-  .route('/:userId/orderHistory')
-  .get(
-    authenticate,
-    restrictUserTypes('both'),
-    defaultPagination,
-    orderController.getAllOrders
-  );
 
 router.patch(
   '/:id/status',

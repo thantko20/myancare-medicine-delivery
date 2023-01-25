@@ -11,14 +11,27 @@ const orderService = {
       .limitFields()
       .paginate()
       .sort();
-    const result = await features.query;
-    const orders = await result;
+    const orders = await features.query;
     return orders;
   },
   getOrderById: async (orderId) => {
     const order = await Order.findById(orderId);
 
+    if (!order) {
+      throw ApiError.badRequest('Order not found.');
+    }
+
     return order;
+  },
+  getMyOrders: async (userId, query) => {
+    if (query.user) query.user = undefined;
+    const features = new APIFeatures(Order.find({ user: userId }), query);
+
+    features.filter().paginate().sort();
+
+    const orders = await features.query;
+
+    return orders;
   },
   createOrder: async (data) => {
     // Check if medicine ids are valid
