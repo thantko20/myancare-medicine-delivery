@@ -3,6 +3,7 @@ const Medicine = require('../models/medicine.model');
 const APIFeatures = require('../utils/apiFeatures');
 const ApiError = require('../utils/apiError');
 const { ORDER_STATUS, ORDER_STATUS_LEVEL } = require('../constants');
+const User = require('../models/user.model');
 
 const orderService = {
   getAllOrders: async (query) => {
@@ -35,6 +36,10 @@ const orderService = {
   },
   createOrder: async (data) => {
     // Check if medicine ids are valid
+    if (typeof data.shippingAddress !== 'object') {
+      const user = await User.findById(data.user).select('address');
+      data.shippingAddress = user.address;
+    }
     const medicines = await Promise.all(
       data.orderItems.map(
         async (item) => await Medicine.findById(item.medicine)
@@ -225,10 +230,7 @@ async function checkStockStatus(orderItems, medicines) {
   const isOrderQuantityOverLimit = medicines.some((medicine) => {
     const medicineId = medicine.id;
     const orderItem = orderItems.find((item) => item.medicine === medicineId);
-    if (!orderItem || orderItem.quatity > medicine.quantity) {
-      return true;
-    }
-    return false;
+    return !orderItem || orderItem.quantity > medicine.quantity;
   });
 
   if (isOrderQuantityOverLimit) {

@@ -48,7 +48,7 @@ const medicineSchema = new Schema(
 );
 
 medicineSchema.virtual('outOfStock').get(function () {
-  return this.quantity === 0;
+  return this.quantity <= 0;
 });
 
 medicineSchema.pre(/^find/, function (next) {

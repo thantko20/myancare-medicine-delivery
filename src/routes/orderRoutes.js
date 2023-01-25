@@ -1,8 +1,11 @@
-const router = require('express').Router({ mergeParams: true });
+const router = require('express').Router();
+
 const orderController = require('../controllers/order.controller');
 const { restrictUserTypes } = require('../middlewares/authorize');
 const authenticate = require('../middlewares/authenticate');
+const validate = require('../middlewares/validate');
 const { USER_TYPES } = require('../constants');
+const createOrderSchema = require('../schemas/createOrderSchema');
 
 router.get(
   '/',
@@ -13,6 +16,7 @@ router.get(
 
 router.post(
   '/',
+  validate(createOrderSchema),
   authenticate,
   restrictUserTypes('customer'),
   orderController.createOrder
