@@ -4,6 +4,20 @@ const { restrictUserTypes } = require('../middlewares/authorize');
 const authenticate = require('../middlewares/authenticate');
 const { USER_TYPES } = require('../constants');
 
+router.get(
+  '/',
+  authenticate,
+  restrictUserTypes('admin'),
+  orderController.getAllOrders
+);
+
+router.post(
+  '/',
+  authenticate,
+  restrictUserTypes('customer'),
+  orderController.createOrder
+);
+
 router.get('/report', orderController.getOrdersReports);
 
 router.get(
@@ -13,22 +27,19 @@ router.get(
   orderController.getMyOrders
 );
 
-router
-  .route('/')
-  .get(authenticate, restrictUserTypes('admin'), orderController.getAllOrders)
-  .post(
-    authenticate,
-    restrictUserTypes('customer'),
-    orderController.createOrder
-  );
+router.get(
+  '/:id',
+  authenticate,
+  restrictUserTypes('both'),
+  orderController.getOrder
+);
 
-router
-  .route('/:id')
-  .get(authenticate, restrictUserTypes('both'), orderController.getOrder);
-
-router
-  .route('/:id/cancel')
-  .patch(authenticate, restrictUserTypes('both'), orderController.cancelOrder);
+router.patch(
+  '/:id/cancel',
+  authenticate,
+  restrictUserTypes('both'),
+  orderController.cancelOrder
+);
 
 router.patch(
   '/:id/status',
