@@ -67,12 +67,12 @@ const orderService = {
       .map((item) => item.medicine.price)
       .reduce((a, b) => a + b, 0);
 
-    const newOrder = await Order.create({ ...data, total });
+    const newOrder = await Order.create({ ...data, user: user.id, total });
     return newOrder;
   },
 
   updateOrderStatus: async (orderId, newStatus) => {
-    if (newStatus === ORDER_STATUS.cancelled) {
+    if (!newStatus || newStatus === ORDER_STATUS.cancelled) {
       throw ApiError.badRequest('Cannot cancel on this endpoint.');
     }
     const order = await Order.findById(orderId);
@@ -116,6 +116,8 @@ const orderService = {
   },
   getOrdersReport: async (query) => {
     let dateRangeFilter = {};
+
+    // TODO: Fix -> throws error when query params are not dates
     if (query.startDate && query.endDate) {
       dateRangeFilter = {
         createdAt: {
@@ -217,7 +219,7 @@ const orderService = {
         },
       },
     ]);
-    return reports;
+    return reports[0];
   },
 };
 
@@ -238,6 +240,10 @@ async function checkStockStatus(orderItems, medicines) {
   }
 
   return true;
+}
+
+async function isValidDate(date) {
+  return date && date instanceof Date;
 }
 
 module.exports = orderService;

@@ -22,7 +22,12 @@ router.post(
   orderController.createOrder
 );
 
-router.get('/report', orderController.getOrdersReports);
+router.get(
+  '/report',
+  authenticate,
+  restrictUserTypes(USER_TYPES.admin),
+  orderController.getOrdersReports
+);
 
 router.get(
   '/me',

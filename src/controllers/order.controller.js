@@ -1,6 +1,5 @@
 const orderService = require('../services/order.service');
 const catchAsync = require('../utils/catchAsync');
-const ApiError = require('../utils/apiError');
 const sendSuccessResponse = require('../utils/sendSuccessResponse');
 
 exports.getAllOrders = catchAsync(async (req, res, next) => {
@@ -19,9 +18,6 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 });
 
 exports.updateOrderStatus = catchAsync(async (req, res, next) => {
-  if (!req.body.status) {
-    throw new ApiError('This route is only for updating order processing', 400);
-  }
   const updatedOrder = await orderService.updateOrderStatus(
     req.params.id,
     req.body.status
@@ -43,7 +39,5 @@ exports.cancelOrder = catchAsync(async (req, res, next) => {
 exports.getOrdersReports = catchAsync(async (req, res, next) => {
   const reports = await orderService.getOrdersReport(req.query);
 
-  res.json({
-    data: reports,
-  });
+  sendSuccessResponse({ res, data: reports });
 });
