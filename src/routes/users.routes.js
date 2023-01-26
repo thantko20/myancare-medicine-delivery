@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+const { upload } = require('../lib/multer');
 const { USER_TYPES, ADMIN_ROLES } = require('../constants');
 const userController = require('../controllers/users.controller');
 const authenticate = require('../middlewares/authenticate');
@@ -27,6 +28,7 @@ router.patch(
   '/me',
   authenticate,
   restrictUserTypes(USER_TYPES.customer),
+  upload.single('avatar'),
   userController.updateMe
 );
 

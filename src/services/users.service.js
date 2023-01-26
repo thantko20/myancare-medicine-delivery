@@ -28,17 +28,25 @@ exports.getUserById = async (id) => {
   return user;
 };
 
-exports.updateUser = async (id, data) => {
+exports.updateUser = async (id, data, avatarFile) => {
   // eslint-disable-next-line no-unused-vars
   if (data.password) {
-    throw ApiError.badRequest();
+    throw ApiError.badRequest('Password should not be updated in such way.');
   }
+
+  if (avatarFile) {
+    data.avatar = {
+      filename: avatarFile.filename,
+      url: avatarFile.path,
+    };
+  }
+
   const updatedUser = await User.findByIdAndUpdate(id, data, {
     new: true,
   });
 
   if (!updatedUser) {
-    throw ApiError.badRequest();
+    throw ApiError.badRequest('No user found!');
   }
   return updatedUser;
 };
