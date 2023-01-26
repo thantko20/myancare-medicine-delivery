@@ -42,3 +42,20 @@ exports.EMAIL_HOST = process.env.EMAIL_HOST;
 exports.EMAIL_PORT = process.env.EMAIL_PORT;
 exports.EMAIL_USERNAME = process.env.EMAIL_USERNAME;
 exports.EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
+
+exports.ORDER_STATUS = {
+  pending: 'PENDING',
+  confirmed: 'CONFIRMED',
+  delivering: 'DELIVERING',
+  done: 'DONE',
+  cancelled: 'CANCELLED',
+};
+
+exports.ORDER_STATUS_LEVEL = {
+  [this.ORDER_STATUS.pending]: 0,
+  [this.ORDER_STATUS.confirmed]: 1,
+  [this.ORDER_STATUS.delivering]: 2,
+  [this.ORDER_STATUS.done]: 3,
+};
+
+exports.ORDER_STATUS_LIST = Object.values(this.ORDER_STATUS);

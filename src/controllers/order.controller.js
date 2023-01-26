@@ -1,41 +1,43 @@
 const orderService = require('../services/order.service');
 const catchAsync = require('../utils/catchAsync');
-const ApiError = require('../utils/apiError');
 const sendSuccessResponse = require('../utils/sendSuccessResponse');
 
 exports.getAllOrders = catchAsync(async (req, res, next) => {
-  const orders = await orderService.getAllOrders(req);
+  const orders = await orderService.getAllOrders(req.query);
   sendSuccessResponse({ res, code: 200, data: orders });
 });
 
 exports.getOrder = catchAsync(async (req, res, next) => {
-  const order = await orderService.getOrder(req.params.id);
+  const order = await orderService.getOrderById(req.params.id);
   sendSuccessResponse({ res, code: 200, data: order });
 });
 
 exports.createOrder = catchAsync(async (req, res, next) => {
-  const newOrder = await orderService.createOrder(req);
+  const newOrder = await orderService.createOrder(req.body, req.user);
   sendSuccessResponse({ res, code: 200, data: newOrder });
 });
 
-exports.handlingOrdersStatus = catchAsync(async (req, res, next) => {
-  if (!req.body.status) {
-    throw new ApiError('This route is only for updating order processing', 400);
-  }
-  const updatedOrder = await orderService.handlingOrdersStatus(
+exports.updateOrderStatus = catchAsync(async (req, res, next) => {
+  const updatedOrder = await orderService.updateOrderStatus(
     req.params.id,
     req.body.status
   );
-  sendSuccessResponse({ res, code: 200, data: updatedOrder });
+  sendSuccessResponse({ res, data: updatedOrder });
+});
+
+exports.getMyOrders = catchAsync(async (req, res, next) => {
+  const orders = await orderService.getMyOrders(req.user.id, req.query);
+
+  sendSuccessResponse({ res, data: orders });
 });
 
 exports.cancelOrder = catchAsync(async (req, res, next) => {
-  if (!req.body.status) {
-    throw new ApiError('This route is only for order cancelling', 400);
-  }
-  const updatedOrder = await orderService.cancelOrder(
-    req.params.id,
-    req.body.status
-  );
-  sendSuccessResponse({ res, code: 200, data: updatedOrder });
+  const updatedOrder = await orderService.cancelOrder(req.params.id);
+  sendSuccessResponse({ res, data: updatedOrder });
+});
+
+exports.getOrdersReports = catchAsync(async (req, res, next) => {
+  const reports = await orderService.getOrdersReport(req.query);
+
+  sendSuccessResponse({ res, data: reports });
 });
