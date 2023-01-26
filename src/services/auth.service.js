@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const ApiError = require('../utils/apiError');
 const User = require('../models/user.model');
@@ -96,6 +97,24 @@ exports.refreshAccessToken = async (token) => {
   return accessToken;
 };
 
+exports.setResetPasswordToken = async (user) => {
+  const resetToken = createPasswordResetToken();
+  const expire = Date.now() + 10 * 60 * 1000; // 10 Minutes
+
+  user.passwordResetToken = resetToken;
+  user.passwordResetExpires = expire;
+  await user.save();
+
+  return user;
+};
+
+exports.revertResetPasswordToken = async (user) => {
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
+  return user;
+};
+
 async function comparePasswords(plainText, encrypted) {
   const isValid = await bcrypt.compare(plainText, encrypted);
   return isValid;
@@ -107,4 +126,15 @@ async function signTokens(payload) {
   const refreshToken = await signRefreshToken(payload);
 
   return { accessToken, refreshToken };
+}
+
+function createPasswordResetToken() {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  const hashToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  return hashToken;
 }

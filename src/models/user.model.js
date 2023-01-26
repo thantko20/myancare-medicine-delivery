@@ -31,6 +31,18 @@ const userSchema = new Schema(
       filename: String,
       url: String,
     },
+    passwordResetToken: {
+      type: String,
+      select: false,
+    },
+    passwordResetExpires: {
+      type: Date,
+      select: false,
+    },
+    passwordChangedAt: {
+      type: String,
+      select: false,
+    },
   },
   {
     timestamps: true,

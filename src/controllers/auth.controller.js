@@ -1,11 +1,14 @@
 const catchAsync = require('../utils/catchAsync');
 const authService = require('../services/auth.service');
 const emailService = require('../services/email.service');
+const userService = require('../services/users.service');
 const {
   ACCESS_TOKEN_EXPIRES,
   NODE_ENV,
   REFRESH_TOKEN_EXPIRES,
 } = require('../constants');
+const ApiError = require('../utils/apiError');
+const sendSuccessResponse = require('../utils/sendSuccessResponse');
 
 exports.registerCustomer = catchAsync(async (req, res, next) => {
   const payload = await authService.registerCustomer(req.body, req.file);
@@ -73,3 +76,24 @@ function sendTokens(res, { accessToken, refreshToken = undefined, user }) {
     data: { accessToken, user },
   });
 }
+
+exports.requestResetPassword = catchAsync(async (req, res, next) => {
+  const user = await userService.getUserByEmail(req.body.email);
+  await authService.setResetPasswordToken(user);
+
+  const resetURL = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/auth/forget-password/${user.passwordResetToken}`;
+
+  try {
+    await emailService.sendMessage({
+      to: user.email,
+      html: `<a href=${resetURL}>Click Here Please:)</a>`,
+    });
+
+    sendSuccessResponse({ res, code: 204 });
+  } catch (error) {
+    await authService.revertResetPasswordToken(user);
+    next(error);
+  }
+});

@@ -28,6 +28,15 @@ exports.getUserById = async (id) => {
   return user;
 };
 
+exports.getUserByEmail = async (email) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw ApiError.badRequest('User does not exists');
+  }
+
+  return user;
+};
+
 exports.updateUser = async (id, data, avatarFile) => {
   // eslint-disable-next-line no-unused-vars
   if (data.password) {

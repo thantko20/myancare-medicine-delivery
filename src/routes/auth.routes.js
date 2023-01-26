@@ -40,4 +40,6 @@ router.post(
 
 router.post('/refresh-token', authController.refreshAccessToken);
 
+router.post('/forget-password', authController.requestResetPassword);
+
 module.exports = router;
