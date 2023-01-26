@@ -8,14 +8,14 @@ const {
   restrictUserTypes,
   restrictAdmins,
 } = require('../middlewares/authorize');
-const autheticate = require('../middlewares/authenticate');
-const { ADMIN_ROLES } = require('../constants');
+const authenticate = require('../middlewares/authenticate');
+const { ADMIN_ROLES, USER_TYPES } = require('../constants');
 
 router
   .route('/')
   .get(defaultPagination, medicineController.getAllMedicines)
   .post(
-    autheticate,
+    authenticate,
     restrictUserTypes('admin'),
     restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
     upload.array('images', 2),
@@ -27,13 +27,18 @@ router
   .route('/:id')
   .get(medicineController.getMedicine)
   .patch(
-    autheticate,
-    restrictUserTypes('admin'),
-    restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
+    authenticate,
+    restrictUserTypes(USER_TYPES.admin),
+    restrictAdmins([
+      ADMIN_ROLES.superadmin,
+      ADMIN_ROLES.admin,
+      ADMIN_ROLES.supervisor,
+    ]),
+    upload.array('images', 2),
     medicineController.updateMedicine
   )
   .delete(
-    autheticate,
+    authenticate,
     restrictUserTypes('admin'),
     restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
     medicineController.deleteMedicine
@@ -42,7 +47,7 @@ router
 router
   .route('/:id/updateQuantity')
   .patch(
-    autheticate,
+    authenticate,
     restrictUserTypes('admin'),
     restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
     medicineController.updateQuantity
