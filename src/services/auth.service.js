@@ -10,8 +10,14 @@ const {
   verifyRefreshToken,
 } = require('../utils/jwt');
 
-exports.registerCustomer = async (data) => {
-  const user = await User.create(data);
+exports.registerCustomer = async (data, avatarFile) => {
+  const user = await User.create({
+    ...data,
+    avatar: {
+      filename: avatarFile?.filename,
+      url: avatarFile?.path,
+    },
+  });
   user.password = undefined;
   if (!user) {
     throw ApiError.badRequest('There was an error during registering.');

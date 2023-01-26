@@ -27,6 +27,10 @@ const userSchema = new Schema(
       city: { type: String, required: true },
       country: { type: String, required: true },
     },
+    avatar: {
+      filename: String,
+      url: String,
+    },
   },
   {
     timestamps: true,

@@ -8,7 +8,7 @@ const {
 } = require('../constants');
 
 exports.registerCustomer = catchAsync(async (req, res, next) => {
-  const payload = await authService.registerCustomer(req.body);
+  const payload = await authService.registerCustomer(req.body, req.file);
 
   const user = payload.user;
 

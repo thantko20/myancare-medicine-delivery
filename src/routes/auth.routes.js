@@ -8,6 +8,7 @@ const {
   restrictAdmins,
 } = require('../middlewares/authorize');
 const validate = require('../middlewares/validate');
+const { upload } = require('../lib/multer');
 const createAdminSchema = require('../schemas/createAdminSchema');
 const loginAdminSchema = require('../schemas/loginAdminSchema');
 const loginUserSchema = require('../schemas/loginUserSchema');
@@ -15,6 +16,7 @@ const registerUserSchema = require('../schemas/registerUserSchema');
 
 router.post(
   '/register',
+  upload.single('avatar'),
   validate(registerUserSchema),
   authController.registerCustomer
 );
