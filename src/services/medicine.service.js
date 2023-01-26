@@ -1,4 +1,5 @@
 const Medicine = require('../models/medicine.model');
+const ApiError = require('../utils/apiError');
 
 const medicineService = {
   getAllMedicines: async (req) => {
@@ -131,16 +132,31 @@ const medicineService = {
     });
     return newMedicine;
   },
-  updateMedicine: async (medicineId, reqBody) => {
-    const updatedmedicine = await Medicine.findByIdAndUpdate(
-      medicineId,
-      reqBody,
-      {
-        runValidators: true,
-        new: true,
-      }
+  updateMedicine: async (medicineId, data, files = []) => {
+    const sanitizedFiles = files.map((file) => ({
+      filename: file.filename,
+      url: file.path,
+    }));
+
+    const { deletedImagesIds = [], ...updatedData } = data;
+
+    const medicine = await Medicine.findById(medicineId);
+    if (!medicine) throw ApiError.badRequest('No medicine found.');
+
+    const updatedImages = [
+      ...medicine.images.filter(
+        (img) => !deletedImagesIds.some((id) => id === img.filename)
+      ),
+      ...sanitizedFiles,
+    ];
+
+    const updatedMedicine = await Medicine.findByIdAndUpdate(
+      medicine.id,
+      { ...updatedData, images: updatedImages },
+      { new: true }
     );
-    return updatedmedicine;
+
+    return updatedMedicine;
   },
   updateQuantity: async (medicineId, reqBody) => {
     const updatedMedicine = await Medicine.findByIdAndUpdate(
