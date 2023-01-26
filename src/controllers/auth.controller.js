@@ -79,16 +79,14 @@ function sendTokens(res, { accessToken, refreshToken = undefined, user }) {
 
 exports.requestResetPassword = catchAsync(async (req, res, next) => {
   const user = await userService.getUserByEmail(req.body.email);
-  await authService.setResetPasswordToken(user);
+  const resetToken = await authService.setResetPasswordToken(user);
 
-  const resetURL = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/auth/forget-password/${user.passwordResetToken}`;
+  const resetURL = `https://www.myancare-medicine.com/reset-password/${resetToken}`;
 
   try {
     await emailService.sendMessage({
       to: user.email,
-      html: `<a href=${resetURL}>Click Here Please:)</a>`,
+      text: resetURL,
     });
 
     sendSuccessResponse({ res, code: 204 });
@@ -96,4 +94,10 @@ exports.requestResetPassword = catchAsync(async (req, res, next) => {
     await authService.revertResetPasswordToken(user);
     next(error);
   }
+});
+
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  await authService.resetPassword(req.params.token, req.body.password);
+
+  sendSuccessResponse({ res, code: 204 });
 });

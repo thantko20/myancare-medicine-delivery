@@ -98,20 +98,42 @@ exports.refreshAccessToken = async (token) => {
 };
 
 exports.setResetPasswordToken = async (user) => {
-  const resetToken = createPasswordResetToken();
+  const { resetToken, hashedToken } = createPasswordResetToken();
   const expire = Date.now() + 10 * 60 * 1000; // 10 Minutes
 
-  user.passwordResetToken = resetToken;
+  user.passwordResetToken = hashedToken;
   user.passwordResetExpires = expire;
   await user.save();
 
-  return user;
+  return resetToken;
 };
 
 exports.revertResetPasswordToken = async (user) => {
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
   await user.save();
+  return user;
+};
+
+exports.resetPassword = async (token, password) => {
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    throw ApiError.badRequest('Token Expired.');
+  }
+
+  user.password = password;
+  user.passwordChangedAt = Date.now();
+  user.passwordResetExpires = undefined;
+  user.passwordResetToken = undefined;
+
+  await user.save();
+
   return user;
 };
 
@@ -131,10 +153,10 @@ async function signTokens(payload) {
 function createPasswordResetToken() {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
-  const hashToken = crypto
+  const hashedToken = crypto
     .createHash('sha256')
     .update(resetToken)
     .digest('hex');
 
-  return hashToken;
+  return { resetToken, hashedToken };
 }
