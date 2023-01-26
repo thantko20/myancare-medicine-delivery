@@ -104,15 +104,18 @@ const orderService = {
       throw ApiError.badRequest('Cannot cancel order after confirmation.');
     }
 
-    const updatedOrder = await Order.findByIdAndUpdate(
-      orderId,
-      {
-        status: ORDER_STATUS.cancelled,
-      },
-      { new: true }
+    order.status = ORDER_STATUS.cancelled;
+    await order.save();
+
+    await Promise.all(
+      order.orderItems.map(async (item) => {
+        await Medicine.findByIdAndUpdate(item.medicine, {
+          $inc: { quantity: item.quantity },
+        });
+      })
     );
 
-    return updatedOrder;
+    return order;
   },
   getOrdersReport: async (query) => {
     let dateRangeFilter = {};
