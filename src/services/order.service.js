@@ -129,13 +129,14 @@ const orderService = {
         },
       };
     }
-    const reports = await Order.aggregate([
-      {
-        $match: {
-          ...dateRangeFilter,
-          status: ORDER_STATUS.done,
-        },
+    const matchStage = {
+      $match: {
+        ...dateRangeFilter,
+        status: ORDER_STATUS.done,
       },
+    };
+
+    const unwindAndPopulateOrderItems = [
       {
         $unwind: '$orderItems',
       },
@@ -150,6 +151,8 @@ const orderService = {
       {
         $unwind: '$orderItems.medicine',
       },
+    ];
+    const groupByMedicineItemsAndProject = [
       {
         $group: {
           _id: '$orderItems.medicine',
@@ -165,6 +168,9 @@ const orderService = {
           totalAmount: { $multiply: ['$_id.price', '$quantitySold'] },
         },
       },
+    ];
+
+    const unwindCategories = [
       {
         $lookup: {
           from: 'categories',
@@ -176,6 +182,9 @@ const orderService = {
       {
         $unwind: '$category',
       },
+    ];
+
+    const groupByCategoriesAndProject = [
       {
         $group: {
           _id: '$category',
@@ -199,6 +208,9 @@ const orderService = {
           totalAmount: 1,
         },
       },
+    ];
+
+    const projectToTotalAmountWithCategoriesArray = [
       {
         $group: {
           _id: null,
@@ -224,6 +236,15 @@ const orderService = {
           },
         },
       },
+    ];
+
+    const reports = await Order.aggregate([
+      matchStage,
+      ...unwindAndPopulateOrderItems,
+      ...groupByMedicineItemsAndProject,
+      ...unwindCategories,
+      ...groupByCategoriesAndProject,
+      ...projectToTotalAmountWithCategoriesArray,
     ]);
     return reports[0];
   },
