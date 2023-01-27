@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
+const validate = require('../middlewares/validate');
+const { upload } = require('../lib/multer');
 const { USER_TYPES, ADMIN_ROLES } = require('../constants');
 const userController = require('../controllers/users.controller');
 const authenticate = require('../middlewares/authenticate');
@@ -7,6 +9,7 @@ const {
   restrictUserTypes,
   restrictAdmins,
 } = require('../middlewares/authorize');
+const updateUserSchema = require('../schemas/updateUserSchema');
 
 router.get(
   '/',
@@ -25,8 +28,11 @@ router.get(
 
 router.patch(
   '/me',
+  validate(updateUserSchema),
   authenticate,
   restrictUserTypes(USER_TYPES.customer),
+  upload.single('avatar'),
+  validate(updateUserSchema),
   userController.updateMe
 );
 
@@ -40,6 +46,7 @@ router.get(
 
 router.patch(
   '/:id',
+  validate(updateUserSchema),
   authenticate,
   restrictUserTypes(USER_TYPES.admin),
   restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),

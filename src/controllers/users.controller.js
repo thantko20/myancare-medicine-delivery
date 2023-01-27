@@ -19,7 +19,11 @@ exports.getMe = (req, res, next) => {
 exports.updateMe = catchAsync(async (req, res, next) => {
   if (!req.user) return next(ApiError.badRequest());
 
-  const updatedUser = await userService.updateUser(req.user.id, req.body);
+  const updatedUser = await userService.updateUser(
+    req.user.id,
+    req.body,
+    req.file
+  );
 
   sendSuccessResponse({ res, code: 201, data: updatedUser });
 });

@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const ApiError = require('../utils/apiError');
 const User = require('../models/user.model');
@@ -10,8 +11,14 @@ const {
   verifyRefreshToken,
 } = require('../utils/jwt');
 
-exports.registerCustomer = async (data) => {
-  const user = await User.create(data);
+exports.registerCustomer = async (data, avatarFile) => {
+  const user = await User.create({
+    ...data,
+    avatar: {
+      filename: avatarFile?.filename,
+      url: avatarFile?.path,
+    },
+  });
   user.password = undefined;
   if (!user) {
     throw ApiError.badRequest('There was an error during registering.');
@@ -90,6 +97,67 @@ exports.refreshAccessToken = async (token) => {
   return accessToken;
 };
 
+exports.setResetPasswordToken = async (user) => {
+  const { resetToken, hashedToken } = createPasswordResetToken();
+  const expire = Date.now() + 10 * 60 * 1000; // 10 Minutes
+
+  user.passwordResetToken = hashedToken;
+  user.passwordResetExpires = expire;
+  await user.save();
+
+  return resetToken;
+};
+
+exports.revertResetPasswordToken = async (user) => {
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
+  return user;
+};
+
+exports.resetPassword = async (token, password) => {
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    throw ApiError.badRequest('Token Expired.');
+  }
+
+  user.password = password;
+  user.passwordChangedAt = Date.now();
+  user.passwordResetExpires = undefined;
+  user.passwordResetToken = undefined;
+
+  await user.save();
+
+  return user;
+};
+
+exports.updatePassword = async ({ userId, oldPassword, newPassword }) => {
+  const user = await User.findById(userId).select('+password');
+
+  if (!user) {
+    throw ApiError.badRequest('No user found.');
+  }
+
+  const isValidPassword = await comparePasswords(oldPassword, user.password);
+
+  if (!isValidPassword) {
+    throw ApiError.badRequest('Invalid Password');
+  }
+
+  user.password = newPassword;
+  user.passwordChangedAt = Date.now();
+
+  await user.save();
+
+  return user;
+};
+
 async function comparePasswords(plainText, encrypted) {
   const isValid = await bcrypt.compare(plainText, encrypted);
   return isValid;
@@ -101,4 +169,15 @@ async function signTokens(payload) {
   const refreshToken = await signRefreshToken(payload);
 
   return { accessToken, refreshToken };
+}
+
+function createPasswordResetToken() {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  return { resetToken, hashedToken };
 }
