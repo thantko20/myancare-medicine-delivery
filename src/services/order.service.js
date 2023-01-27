@@ -4,45 +4,46 @@ const User = require('../models/user.model');
 const APIFeatures = require('../utils/apiFeatures');
 const ApiError = require('../utils/apiError');
 const { ORDER_STATUS, ORDER_STATUS_LEVEL } = require('../constants');
-
 const {
   sendOrderConfirmationMessageToUser,
   sendOrderShippedMessageToUser,
-} = require('./email.service');
-
+} = require('../');
 const orderService = {
-  getAllOrders: async (req) => {
-    // Filtering OrderStatus
-    let customFilter = {};
-
-    if (req.query.status)
-      customFilter = {
-        status: req.query.status,
-      };
-
-    // filtering user's order history only
-    let filter = {};
-
-    if (req.params.userId) filter = { user: req.params.userId };
-
-    const features = new APIFeatures(Order.find(filter), req.query)
-      .filter(customFilter)
+  getAllOrders: async (query) => {
+    const features = new APIFeatures(Order.find(), query)
+      .filter()
       .limitFields()
       .paginate()
       .sort();
-
-    const result = await features.query;
-    const orders = await result;
-
+    const orders = await features.query;
     return orders;
   },
   getOrderById: async (orderId) => {
     const order = await Order.findById(orderId);
 
+    if (!order) {
+      throw ApiError.badRequest('Order not found.');
+    }
+
     return order;
   },
-  createOrder: async (data) => {
+  getMyOrders: async (userId, query) => {
+    if (query.user) query.user = undefined;
+    const features = new APIFeatures(Order.find({ user: userId }), query);
+
+    features.filter().paginate().sort();
+
+    const orders = await features.query;
+
+    return orders;
+  },
+  createOrder: async (data, user) => {
     // Check if medicine ids are valid
+    if (typeof data.shippingAddress !== 'object') {
+      data.shippingAddress = user.address;
+    }
+
+    data.phone = data.phone || user.phone;
     const medicines = await Promise.all(
       data.orderItems.map(
         async (item) => await Medicine.findById(item.medicine)
@@ -69,18 +70,13 @@ const orderService = {
     const total = data.orderItems
       .map((item) => item.medicine.price * item.quantity)
       .reduce((a, b) => a + b, 0);
-    const newOrder = await Order.create({ ...data, total });
-    const user = await User.findById(data.user);
-    try {
-      await sendOrderConfirmationMessageToUser(user.email, newOrder, total);
-    } catch (err) {
-      throw new ApiError('There is something went wrong while ordering', 400);
-    }
+    const newOrder = await Order.create({ ...data, user: user.id, total });
+
     return newOrder;
   },
 
   updateOrderStatus: async (orderId, newStatus) => {
-    if (newStatus === ORDER_STATUS.cancelled) {
+    if (!newStatus || newStatus === ORDER_STATUS.cancelled) {
       throw ApiError.badRequest('Cannot cancel on this endpoint.');
     }
     const order = await Order.findById(orderId);
@@ -125,18 +121,23 @@ const orderService = {
       throw ApiError.badRequest('Cannot cancel order after confirmation.');
     }
 
-    const updatedOrder = await Order.findByIdAndUpdate(
-      orderId,
-      {
-        status: ORDER_STATUS.cancelled,
-      },
-      { new: true }
+    order.status = ORDER_STATUS.cancelled;
+    await order.save();
+
+    await Promise.all(
+      order.orderItems.map(async (item) => {
+        await Medicine.findByIdAndUpdate(item.medicine, {
+          $inc: { quantity: item.quantity },
+        });
+      })
     );
 
-    return updatedOrder;
+    return order;
   },
   getOrdersReport: async (query) => {
     let dateRangeFilter = {};
+
+    // TODO: Fix -> throws error when query params are not dates
     if (query.startDate && query.endDate) {
       dateRangeFilter = {
         createdAt: {
@@ -145,10 +146,14 @@ const orderService = {
         },
       };
     }
-    const reports = await Order.aggregate([
-      {
-        $match: dateRangeFilter,
+    const matchStage = {
+      $match: {
+        ...dateRangeFilter,
+        status: ORDER_STATUS.done,
       },
+    };
+
+    const unwindAndPopulateOrderItems = [
       {
         $unwind: '$orderItems',
       },
@@ -163,6 +168,8 @@ const orderService = {
       {
         $unwind: '$orderItems.medicine',
       },
+    ];
+    const groupByMedicineItemsAndProject = [
       {
         $group: {
           _id: '$orderItems.medicine',
@@ -178,6 +185,9 @@ const orderService = {
           totalAmount: { $multiply: ['$_id.price', '$quantitySold'] },
         },
       },
+    ];
+
+    const unwindCategories = [
       {
         $lookup: {
           from: 'categories',
@@ -189,6 +199,9 @@ const orderService = {
       {
         $unwind: '$category',
       },
+    ];
+
+    const groupByCategoriesAndProject = [
       {
         $group: {
           _id: '$category',
@@ -212,6 +225,9 @@ const orderService = {
           totalAmount: 1,
         },
       },
+    ];
+
+    const projectToTotalAmountWithCategoriesArray = [
       {
         $group: {
           _id: null,
@@ -237,30 +253,41 @@ const orderService = {
           },
         },
       },
+    ];
+
+    const reports = await Order.aggregate([
+      matchStage,
+      ...unwindAndPopulateOrderItems,
+      ...groupByMedicineItemsAndProject,
+      ...unwindCategories,
+      ...groupByCategoriesAndProject,
+      ...projectToTotalAmountWithCategoriesArray,
     ]);
-    return reports;
+    return reports[0];
   },
 };
 
 async function checkStockStatus(orderItems, medicines) {
-  if (medicines.some((medicine) => medicine.outOfStock)) {
+  const isOutOfStock = medicines.some((medicine) => medicine.outOfStock);
+  if (isOutOfStock) {
     return false;
   }
 
-  if (
-    medicines.some((medicine) => {
-      const medicineId = medicine.id;
-      const orderItem = orderItems.find((item) => item.medicine === medicineId);
-      if (!orderItem || orderItem.quatity > medicine.quantity) {
-        return true;
-      }
-      return false;
-    })
-  ) {
+  const isOrderQuantityOverLimit = medicines.some((medicine) => {
+    const medicineId = medicine.id;
+    const orderItem = orderItems.find((item) => item.medicine === medicineId);
+    return !orderItem || orderItem.quantity > medicine.quantity;
+  });
+
+  if (isOrderQuantityOverLimit) {
     return false;
   }
 
   return true;
+}
+
+async function isValidDate(date) {
+  return date && date instanceof Date;
 }
 
 module.exports = orderService;

@@ -1,14 +1,17 @@
 const catchAsync = require('../utils/catchAsync');
 const authService = require('../services/auth.service');
 const emailService = require('../services/email.service');
+const userService = require('../services/users.service');
 const {
   ACCESS_TOKEN_EXPIRES,
   NODE_ENV,
   REFRESH_TOKEN_EXPIRES,
 } = require('../constants');
+const ApiError = require('../utils/apiError');
+const sendSuccessResponse = require('../utils/sendSuccessResponse');
 
 exports.registerCustomer = catchAsync(async (req, res, next) => {
-  const payload = await authService.registerCustomer(req.body);
+  const payload = await authService.registerCustomer(req.body, req.file);
 
   const user = payload.user;
 
@@ -73,3 +76,38 @@ function sendTokens(res, { accessToken, refreshToken = undefined, user }) {
     data: { accessToken, user },
   });
 }
+
+exports.requestResetPassword = catchAsync(async (req, res, next) => {
+  const user = await userService.getUserByEmail(req.body.email);
+  const resetToken = await authService.setResetPasswordToken(user);
+
+  const resetURL = `https://www.myancare-medicine.com/reset-password/${resetToken}`;
+
+  try {
+    await emailService.sendMessage({
+      to: user.email,
+      text: resetURL,
+    });
+
+    sendSuccessResponse({ res, code: 204 });
+  } catch (error) {
+    await authService.revertResetPasswordToken(user);
+    next(error);
+  }
+});
+
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  await authService.resetPassword(req.params.token, req.body.password);
+
+  sendSuccessResponse({ res, code: 204 });
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  await authService.updatePassword({
+    userId: req.user.id,
+    oldPassword: req.body.oldPassword,
+    newPassword: req.body.newPassword,
+  });
+
+  sendSuccessResponse({ res, code: 204 });
+});

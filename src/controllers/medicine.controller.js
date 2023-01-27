@@ -27,7 +27,8 @@ exports.updateMedicine = catchAsync(async (req, res, next) => {
   }
   const medicine = await medicineService.updateMedicine(
     req.params.id,
-    req.body
+    req.body,
+    req.files
   );
   sendSuccessResponse({ res, code: 201, data: medicine });
 });

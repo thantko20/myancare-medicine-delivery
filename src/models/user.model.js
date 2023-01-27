@@ -1,6 +1,8 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 
+const Counter = require('./counters.model');
+
 const userSchema = new Schema(
   {
     name: { type: String, required: true, minLength: 2, maxLength: 50 },
@@ -27,6 +29,22 @@ const userSchema = new Schema(
       city: { type: String, required: true },
       country: { type: String, required: true },
     },
+    avatar: {
+      filename: String,
+      url: String,
+    },
+    passwordResetToken: {
+      type: String,
+      select: false,
+    },
+    passwordResetExpires: {
+      type: Date,
+      select: false,
+    },
+    passwordChangedAt: {
+      type: String,
+      select: false,
+    },
   },
   {
     timestamps: true,
@@ -44,8 +62,13 @@ userSchema.pre('save', hashPassword);
 userSchema.pre('save', async function (next) {
   if (!this.isNew) return next();
 
-  const docCount = await this.constructor.count({});
-  this.customerId = `C-${(docCount + 1).toString().padStart(4, '0')}`;
+  const userCountDoc = await Counter.findOneAndUpdate(
+    { collectionName: 'User' },
+    { collectionName: 'User' },
+    { upsert: true, new: true }
+  );
+  this.customerId = `C-${(userCountDoc.count + 1).toString().padStart(4, '0')}`;
+  await Counter.findByIdAndUpdate(userCountDoc.id, { $inc: { count: 1 } });
   next();
 });
 
