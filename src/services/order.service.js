@@ -131,7 +131,10 @@ const orderService = {
     }
     const reports = await Order.aggregate([
       {
-        $match: dateRangeFilter,
+        $match: {
+          ...dateRangeFilter,
+          status: ORDER_STATUS.done,
+        },
       },
       {
         $unwind: '$orderItems',
