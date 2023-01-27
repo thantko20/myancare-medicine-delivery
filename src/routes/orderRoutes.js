@@ -27,12 +27,13 @@ router
   .get(authenticate, restrictUserTypes('admin'), orderController.getOrder);
 
 // Order Status Changing / accept/delivered
-router.route('/:id');
-// .patch(
-//   authenticate,
-//   restrictUserTypes('admin'),
-//   orderController.handlingOrdersStatus
-// );
+router
+  .route('/:id')
+  .patch(
+    authenticate,
+    restrictUserTypes('admin'),
+    orderController.handlingOrdersStatus
+  );
 
 router
   .route('/:id/cancel')

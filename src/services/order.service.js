@@ -64,13 +64,12 @@ const orderService = {
       throw ApiError.badRequest();
     }
     const total = data.orderItems
-      .map((item) => item.medicine.price)
+      .map((item) => item.medicine.price * item.quantity)
       .reduce((a, b) => a + b, 0);
-
     const newOrder = await Order.create({ ...data, total });
     const user = await User.findById(data.user);
     try {
-      await sendWelcomeMessageToUser(user.email, user.name);
+      await sendWelcomeMessageToUser(user.email, newOrder, total);
     } catch (err) {
       throw new ApiError('There is something went wrong while ordering', 400);
     }

@@ -1,6 +1,11 @@
 const path = require('path');
+const express = require('express');
 var nodemailer = require('nodemailer');
 var hbs = require('nodemailer-express-handlebars');
+const Handlebars = require('handlebars');
+const {
+  allowInsecurePrototypeAccess,
+} = require('@handlebars/allow-prototype-access');
 
 const {
   EMAIL_HOST,
@@ -16,9 +21,15 @@ exports.sendMessage = async (messageConfiguration) => {
   const handlebarOptions = {
     viewEngine: {
       defaultLayout: false,
+      handlebars: allowInsecurePrototypeAccess(Handlebars),
     },
     viewPath: viewpath,
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+      allowedProtoMethodsByDefault: true,
+    },
   };
+
   transporter.use('compile', hbs(handlebarOptions));
 
   await transporter.sendMail({
@@ -27,14 +38,15 @@ exports.sendMessage = async (messageConfiguration) => {
   });
 };
 
-exports.sendWelcomeMessageToUser = async (to, name) => {
+exports.sendWelcomeMessageToUser = async (to, data, totalFees) => {
   await this.sendMessage({
     to: to,
     subject: 'Welcome!',
     text: 'Its really workinggg',
     template: 'email',
     context: {
-      userName: name,
+      order: data,
+      total: totalFees,
     },
   });
 };
