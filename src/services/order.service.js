@@ -1,13 +1,9 @@
 const Order = require('../models/order.model');
 const Medicine = require('../models/medicine.model');
-const User = require('../models/user.model');
 const APIFeatures = require('../utils/apiFeatures');
 const ApiError = require('../utils/apiError');
 const { ORDER_STATUS, ORDER_STATUS_LEVEL } = require('../constants');
-const {
-  sendOrderConfirmationMessageToUser,
-  sendOrderShippedMessageToUser,
-} = require('../');
+
 const orderService = {
   getAllOrders: async (query) => {
     const features = new APIFeatures(Order.find(), query)
@@ -97,20 +93,7 @@ const orderService = {
 
     order.status = newStatus;
     const updatedOrder = await order.save();
-    if (newStatus === ORDER_STATUS.delivering) {
-      try {
-        console.log('email======>', updatedOrder.user.email);
-        await sendOrderShippedMessageToUser(
-          updatedOrder.user.email,
-          updatedOrder.user.name
-        );
-      } catch (err) {
-        throw new ApiError(
-          'There is something went wrong while sending email',
-          400
-        );
-      }
-    }
+
     return updatedOrder;
   },
   cancelOrder: async (orderId) => {

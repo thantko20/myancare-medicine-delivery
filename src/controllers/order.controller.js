@@ -2,6 +2,7 @@ const orderService = require('../services/order.service');
 const catchAsync = require('../utils/catchAsync');
 const sendSuccessResponse = require('../utils/sendSuccessResponse');
 const emailService = require('../services/email.service');
+const { ORDER_STATUS } = require('../constants');
 
 exports.getAllOrders = catchAsync(async (req, res, next) => {
   const orders = await orderService.getAllOrders(req.query);
@@ -29,7 +30,9 @@ exports.updateOrderStatus = catchAsync(async (req, res, next) => {
     req.body.status
   );
 
-  await emailService.sendOrderShippedMessageToUser(req.user);
+  if (req.body.status === ORDER_STATUS.delivering) {
+    await emailService.sendOrderShippedMessageToUser(req.user);
+  }
 
   sendSuccessResponse({ res, data: updatedOrder });
 });
