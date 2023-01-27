@@ -26,18 +26,17 @@ router
   .route('/:id')
   .get(authenticate, restrictUserTypes('admin'), orderController.getOrder);
 
-// Order Status Changing / accept/delivered
-router
-  .route('/:id')
-  .patch(
-    authenticate,
-    restrictUserTypes('admin'),
-    orderController.handlingOrdersStatus
-  );
+router.route('/:id/cancel').patch(
+  // authenticate, restrictUserTypes('both'),
+  orderController.cancelOrder
+);
 
-router
-  .route('/:id/cancel')
-  .patch(authenticate, restrictUserTypes('both'), orderController.cancelOrder);
+router.patch(
+  '/:id/status',
+  // authenticate,
+  // restrictUserTypes(USER_TYPES.admin),
+  orderController.updateOrderStatus
+);
 
 // user's order-history after he ordered
 router
@@ -48,12 +47,5 @@ router
     defaultPagination,
     orderController.getAllOrders
   );
-
-router.patch(
-  '/:id/status',
-  authenticate,
-  restrictUserTypes(USER_TYPES.admin),
-  orderController.updateOrderStatus
-);
 
 module.exports = router;

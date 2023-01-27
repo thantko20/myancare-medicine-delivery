@@ -5,7 +5,10 @@ const APIFeatures = require('../utils/apiFeatures');
 const ApiError = require('../utils/apiError');
 const { ORDER_STATUS, ORDER_STATUS_LEVEL } = require('../constants');
 
-const { sendWelcomeMessageToUser } = require('./email.service');
+const {
+  sendOrderConfirmationMessageToUser,
+  sendOrderShippedMessageToUser,
+} = require('./email.service');
 
 const orderService = {
   getAllOrders: async (req) => {
@@ -69,7 +72,7 @@ const orderService = {
     const newOrder = await Order.create({ ...data, total });
     const user = await User.findById(data.user);
     try {
-      await sendWelcomeMessageToUser(user.email, newOrder, total);
+      await sendOrderConfirmationMessageToUser(user.email, newOrder, total);
     } catch (err) {
       throw new ApiError('There is something went wrong while ordering', 400);
     }
@@ -98,7 +101,20 @@ const orderService = {
 
     order.status = newStatus;
     const updatedOrder = await order.save();
-
+    if (newStatus === ORDER_STATUS.delivering) {
+      try {
+        console.log('email======>', updatedOrder.user.email);
+        await sendOrderShippedMessageToUser(
+          updatedOrder.user.email,
+          updatedOrder.user.name
+        );
+      } catch (err) {
+        throw new ApiError(
+          'There is something went wrong while sending email',
+          400
+        );
+      }
+    }
     return updatedOrder;
   },
   cancelOrder: async (orderId) => {

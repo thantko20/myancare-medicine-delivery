@@ -38,15 +38,25 @@ exports.sendMessage = async (messageConfiguration) => {
   });
 };
 
-exports.sendWelcomeMessageToUser = async (to, data, totalFees) => {
+exports.sendOrderConfirmationMessageToUser = async (to, data, totalFees) => {
   await this.sendMessage({
     to: to,
-    subject: 'Welcome!',
-    text: 'Its really workinggg',
+    subject: 'Order Confirmation from MyanCare Medicine Delivery.',
     template: 'email',
     context: {
       order: data,
       total: totalFees,
+    },
+  });
+};
+
+exports.sendOrderShippedMessageToUser = async (to, userName) => {
+  await this.sendMessage({
+    to: to,
+    subject: 'Order Shipping has been done by MyanCare.',
+    template: 'shipped',
+    context: {
+      name: userName,
     },
   });
 };
