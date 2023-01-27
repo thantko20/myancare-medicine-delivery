@@ -137,6 +137,27 @@ exports.resetPassword = async (token, password) => {
   return user;
 };
 
+exports.updatePassword = async ({ userId, oldPassword, newPassword }) => {
+  const user = await User.findById(userId).select('+password');
+
+  if (!user) {
+    throw ApiError.badRequest('No user found.');
+  }
+
+  const isValidPassword = await comparePasswords(oldPassword, user.password);
+
+  if (!isValidPassword) {
+    throw ApiError.badRequest('Invalid Password');
+  }
+
+  user.password = newPassword;
+  user.passwordChangedAt = Date.now();
+
+  await user.save();
+
+  return user;
+};
+
 async function comparePasswords(plainText, encrypted) {
   const isValid = await bcrypt.compare(plainText, encrypted);
   return isValid;

@@ -1,8 +1,8 @@
 const router = require('express').Router();
 
-const { ADMIN_ROLES } = require('../constants');
+const { ADMIN_ROLES, USER_TYPES } = require('../constants');
 const authController = require('../controllers/auth.controller');
-const autheticate = require('../middlewares/authenticate');
+const authenticate = require('../middlewares/authenticate');
 const {
   restrictUserTypes,
   restrictAdmins,
@@ -13,6 +13,7 @@ const createAdminSchema = require('../schemas/createAdminSchema');
 const loginAdminSchema = require('../schemas/loginAdminSchema');
 const loginUserSchema = require('../schemas/loginUserSchema');
 const registerUserSchema = require('../schemas/registerUserSchema');
+const updateUserPasswordSchema = require('../schemas/updateUserPasswordSchema');
 
 router.post(
   '/register',
@@ -24,7 +25,7 @@ router.post(
 router.post(
   '/register/admin',
   validate(createAdminSchema),
-  autheticate,
+  authenticate,
   restrictUserTypes('admin'),
   restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
   authController.createAdmin
@@ -43,5 +44,13 @@ router.post('/refresh-token', authController.refreshAccessToken);
 router.post('/forget-password', authController.requestResetPassword);
 
 router.post('/reset-password/:token', authController.resetPassword);
+
+router.post(
+  '/update-password',
+  validate(updateUserPasswordSchema),
+  authenticate,
+  restrictUserTypes(USER_TYPES.customer),
+  authController.updatePassword
+);
 
 module.exports = router;

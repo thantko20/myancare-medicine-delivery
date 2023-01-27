@@ -101,3 +101,13 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   sendSuccessResponse({ res, code: 204 });
 });
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  await authService.updatePassword({
+    userId: req.user.id,
+    oldPassword: req.body.oldPassword,
+    newPassword: req.body.newPassword,
+  });
+
+  sendSuccessResponse({ res, code: 204 });
+});
