@@ -13,6 +13,7 @@ const {
   EMAIL_PORT,
   EMAIL_USERNAME,
 } = require('../constants');
+const ApiError = require('../utils/apiError');
 
 exports.sendMessage = async (messageConfiguration) => {
   let transporter = createTransport();
@@ -32,31 +33,35 @@ exports.sendMessage = async (messageConfiguration) => {
 
   transporter.use('compile', hbs(handlebarOptions));
 
-  await transporter.sendMail({
-    from: 'myancare.org.mm@',
-    ...messageConfiguration,
-  });
+  try {
+    await transporter.sendMail({
+      from: 'myancare.org.mm@',
+      ...messageConfiguration,
+    });
+  } catch (err) {
+    throw new ApiError('There is somthing wrong while sending email.', 400);
+  }
 };
 
-exports.sendOrderConfirmationMessageToUser = async (to, data, totalFees) => {
+exports.sendOrderConfirmationMessageToUser = async (to, data) => {
   await this.sendMessage({
     to: to,
     subject: 'Order Confirmation from MyanCare Medicine Delivery.',
     template: 'email',
     context: {
       order: data,
-      total: totalFees,
+      total: data.total,
     },
   });
 };
 
-exports.sendOrderShippedMessageToUser = async (to, userName) => {
+exports.sendOrderShippedMessageToUser = async (to) => {
   await this.sendMessage({
-    to: to,
+    to: to.email,
     subject: 'Order Shipping has been done by MyanCare.',
     template: 'shipped',
     context: {
-      name: userName,
+      name: to.name,
     },
   });
 };
