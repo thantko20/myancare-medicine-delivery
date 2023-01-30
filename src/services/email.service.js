@@ -65,6 +65,17 @@ exports.sendOrderShippedMessageToUser = async (to) => {
   });
 };
 
+exports.sendRegistrationEmail = async (to) => {
+  await this.sendMessage({
+    to: to.email,
+    subject: 'Thanks for Registering at MyanCare App!',
+    template: 'registerd-email',
+    context: {
+      name: to.name,
+    },
+  });
+};
+
 function createTransport() {
   return nodemailer.createTransport({
     host: EMAIL_HOST,
