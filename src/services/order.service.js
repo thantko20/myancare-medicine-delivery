@@ -64,10 +64,10 @@ const orderService = {
       throw ApiError.badRequest();
     }
     const total = data.orderItems
-      .map((item) => item.medicine.price)
+      .map((item) => item.medicine.price * item.quantity)
       .reduce((a, b) => a + b, 0);
-
     const newOrder = await Order.create({ ...data, user: user.id, total });
+
     return newOrder;
   },
 

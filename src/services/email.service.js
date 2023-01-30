@@ -1,4 +1,10 @@
-const nodemailer = require('nodemailer');
+const path = require('path');
+var nodemailer = require('nodemailer');
+var hbs = require('nodemailer-express-handlebars');
+const Handlebars = require('handlebars');
+const {
+  allowInsecurePrototypeAccess,
+} = require('@handlebars/allow-prototype-access');
 
 const {
   EMAIL_HOST,
@@ -6,21 +12,56 @@ const {
   EMAIL_PORT,
   EMAIL_USERNAME,
 } = require('../constants');
+const ApiError = require('../utils/apiError');
 
 exports.sendMessage = async (messageConfiguration) => {
-  const transporter = createTransport();
+  let transporter = createTransport();
+  const viewpath = path.join(__dirname, '../views');
 
-  await transporter.sendMail({
-    from: 'Myancare myancare.org.mm',
-    ...messageConfiguration,
+  const handlebarOptions = {
+    viewEngine: {
+      defaultLayout: false,
+      handlebars: allowInsecurePrototypeAccess(Handlebars),
+    },
+    viewPath: viewpath,
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+      allowedProtoMethodsByDefault: true,
+    },
+  };
+
+  transporter.use('compile', hbs(handlebarOptions));
+
+  try {
+    await transporter.sendMail({
+      from: 'myancare.org.mm@',
+      ...messageConfiguration,
+    });
+  } catch (err) {
+    throw new ApiError('There is somthing wrong while sending email.', 400);
+  }
+};
+
+exports.sendOrderConfirmationMessageToUser = async (to, data) => {
+  await this.sendMessage({
+    to: to,
+    subject: 'Order Confirmation from MyanCare Medicine Delivery.',
+    template: 'email',
+    context: {
+      order: data,
+      total: data.total,
+    },
   });
 };
 
-exports.sendWelcomeMessageToUser = async ({ to }) => {
+exports.sendOrderShippedMessageToUser = async (to) => {
   await this.sendMessage({
-    to,
-    html: '<h1>Hello World</h1>',
-    subject: 'Welcome!',
+    to: to.email,
+    subject: 'Order Shipping has been done by MyanCare.',
+    template: 'shipped',
+    context: {
+      name: to.name,
+    },
   });
 };
 
