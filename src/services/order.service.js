@@ -226,16 +226,16 @@ const orderService = {
           quantitySold: { $sum: '$quantitySold' },
         },
       },
-      {
-        $set: {
-          categories: {
-            $sortArray: {
-              input: '$categories',
-              sortBy: { totalAmount: -1 },
-            },
-          },
-        },
-      },
+      // {
+      //   $set: {
+      //     categories: {
+      //       $sortArray: {
+      //         input: '$categories',
+      //         sortBy: { totalAmount: -1 },
+      //       },
+      //     },
+      //   },
+      // },
     ];
 
     const reports = await Order.aggregate([
