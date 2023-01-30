@@ -65,6 +65,28 @@ exports.sendOrderShippedMessageToUser = async (to) => {
   });
 };
 
+exports.sendRegistrationEmail = async (to) => {
+  await this.sendMessage({
+    to: to.email,
+    subject: 'Thanks for Registering at MyanCare App!',
+    template: 'registered-email',
+    context: {
+      name: to.name,
+    },
+  });
+};
+
+exports.sendResetPasswordEmail = async (email, resetLink) => {
+  await this.sendMessage({
+    to: email,
+    subject: 'Reset Password',
+    template: 'reset-password-email',
+    context: {
+      resetLink,
+    },
+  });
+};
+
 function createTransport() {
   return nodemailer.createTransport({
     host: EMAIL_HOST,
