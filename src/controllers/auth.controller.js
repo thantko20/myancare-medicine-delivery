@@ -7,7 +7,6 @@ const {
   NODE_ENV,
   REFRESH_TOKEN_EXPIRES,
 } = require('../constants');
-const ApiError = require('../utils/apiError');
 const sendSuccessResponse = require('../utils/sendSuccessResponse');
 
 exports.registerCustomer = catchAsync(async (req, res, next) => {

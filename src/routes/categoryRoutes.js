@@ -1,9 +1,5 @@
 const categoryController = require('../controllers/category.controller');
 const router = require('express').Router();
-const medicineRouter = require('../routes/medicineRoutes');
-
-//Pls ignore this line for a moment
-// router.use('/:categoryId/medicines', medicineRouter);
 
 router
   .route('/')
