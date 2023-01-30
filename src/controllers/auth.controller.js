@@ -15,7 +15,7 @@ exports.registerCustomer = catchAsync(async (req, res, next) => {
 
   const user = payload.user;
 
-  await emailService.sendWelcomeMessageToUser({ to: user.email });
+  await emailService.sendRegistrationEmail(user);
 
   sendTokens(res, payload);
 });

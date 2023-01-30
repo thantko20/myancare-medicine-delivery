@@ -69,7 +69,7 @@ exports.sendRegistrationEmail = async (to) => {
   await this.sendMessage({
     to: to.email,
     subject: 'Thanks for Registering at MyanCare App!',
-    template: 'registerd-email',
+    template: 'registered-email',
     context: {
       name: to.name,
     },
