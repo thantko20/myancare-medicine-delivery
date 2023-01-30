@@ -96,7 +96,7 @@ const orderService = {
 
     return updatedOrder;
   },
-  cancelOrder: async (orderId) => {
+  cancelOrder: async (orderId, userType) => {
     const order = await Order.findById(orderId);
     if (!order) throw ApiError.notFound();
 
@@ -105,7 +105,9 @@ const orderService = {
     }
 
     order.status = ORDER_STATUS.cancelled;
-    await order.save();
+
+    order.cancelledBy = userType;
+    await order.save({ validateBeforeSave: false });
 
     await Promise.all(
       order.orderItems.map(async (item) => {
