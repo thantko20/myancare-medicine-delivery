@@ -81,13 +81,12 @@ exports.requestResetPassword = catchAsync(async (req, res, next) => {
   const user = await userService.getUserByEmail(req.body.email);
   const resetToken = await authService.setResetPasswordToken(user);
 
-  const resetURL = `https://www.myancare-medicine.com/reset-password/${resetToken}`;
+  const resetURL = `${req.protocol}://${req.get(
+    'host'
+  )}/auth/v1/reset-password/${resetToken}`;
 
   try {
-    await emailService.sendMessage({
-      to: user.email,
-      text: resetURL,
-    });
+    await emailService.sendResetPasswordEmail(user.email, resetURL);
 
     sendSuccessResponse({ res, code: 204 });
   } catch (error) {

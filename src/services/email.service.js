@@ -76,6 +76,17 @@ exports.sendRegistrationEmail = async (to) => {
   });
 };
 
+exports.sendResetPasswordEmail = async (email, resetLink) => {
+  await this.sendMessage({
+    to: email,
+    subject: 'Reset Password',
+    template: 'reset-password-email',
+    context: {
+      resetLink,
+    },
+  });
+};
+
 function createTransport() {
   return nodemailer.createTransport({
     host: EMAIL_HOST,
