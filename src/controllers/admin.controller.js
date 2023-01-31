@@ -14,6 +14,15 @@ exports.getAdminById = catchAsync(async (req, res, next) => {
 });
 
 exports.getMe = (req, res, next) => {
-  console.log('Hello');
   sendSuccessResponse({ res, data: req.user });
 };
+
+exports.updateAdminById = catchAsync(async (req, res, next) => {
+  const updatedAdmin = await adminService.updateAdminById({
+    id: req.params.id,
+    data: req.body,
+    currentAdminRole: req.user.role,
+  });
+
+  sendSuccessResponse({ res, data: updatedAdmin, code: 201 });
+});
