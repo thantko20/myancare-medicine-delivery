@@ -109,3 +109,13 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   sendSuccessResponse({ res, code: 204 });
 });
+
+exports.updateAdminPassword = catchAsync(async (req, res, next) => {
+  await authService.updateAdminPassword({
+    userId: req.user.id,
+    oldPassword: req.body.oldPassword,
+    newPassword: req.body.newPassword,
+  });
+
+  sendSuccessResponse({ res, code: 204 });
+});

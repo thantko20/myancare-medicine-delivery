@@ -53,4 +53,12 @@ router.post(
   authController.updatePassword
 );
 
+router.post(
+  '/update-password/admin',
+  validate(updateUserPasswordSchema),
+  authenticate,
+  restrictUserTypes(USER_TYPES.admin),
+  authController.updateAdminPassword
+);
+
 module.exports = router;
