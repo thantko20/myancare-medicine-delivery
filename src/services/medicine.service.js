@@ -101,8 +101,12 @@ const medicineService = {
     // customFilter = {name: {$regex......}, category: {$regex...}}
 
     /////////////pls ignore this two lines for a moment/////////
-    // let filter = {};
-    // if (req.params.categoryId) filter = { category: req.params.categoryId };
+    let filter = {};
+    if (req.params.categoryId) {
+      filter = { category: req.params.categoryId };
+      const medicinesWithCate = await Medicine.find(filter);
+      return medicinesWithCate;
+    }
     ///////////////////////////////////////////////////////////////
 
     const result = await Medicine.aggregate(customFilter);
