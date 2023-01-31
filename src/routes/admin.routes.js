@@ -12,8 +12,23 @@ router.get(
   '/',
   authenticate,
   restrictUserTypes(USER_TYPES.admin),
-  restrictAdmins(ADMIN_ROLES.superadmin, ADMIN_ROLES.admin),
+  restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
   adminController.getAdmins
+);
+
+router.get(
+  '/me',
+  authenticate,
+  restrictUserTypes(USER_TYPES.admin),
+  adminController.getMe
+);
+
+router.get(
+  '/:id',
+  authenticate,
+  restrictUserTypes(USER_TYPES.admin),
+  restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),
+  adminController.getAdminById
 );
 
 module.exports = router;

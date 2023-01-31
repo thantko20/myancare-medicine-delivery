@@ -8,7 +8,12 @@ exports.getAdmins = catchAsync(async (req, res, next) => {
 });
 
 exports.getAdminById = catchAsync(async (req, res, next) => {
-  const admin = await adminService.getAdmins(req.params.id);
+  const admin = await adminService.getAdminById(req.params.id);
 
   sendSuccessResponse({ res, data: admin });
 });
+
+exports.getMe = (req, res, next) => {
+  console.log('Hello');
+  sendSuccessResponse({ res, data: req.user });
+};
