@@ -46,6 +46,14 @@ router.post('/forget-password', authController.requestResetPassword);
 router.post('/reset-password/:token', authController.resetPassword);
 
 router.post(
+  '/reset-password/admin',
+  authenticate,
+  restrictUserTypes(USER_TYPES.admin),
+  restrictAdmins([ADMIN_ROLES.superadmin]),
+  authController.overrideAdminPassword
+);
+
+router.router.post(
   '/update-password',
   validate(updateUserPasswordSchema),
   authenticate,

@@ -177,6 +177,23 @@ exports.updateAdminPassword = async ({ userId, oldPassword, newPassword }) => {
   return admin;
 };
 
+exports.overrideAdminPassword = async (id, password) => {
+  const admin = await Admin.findById(id);
+  if (!admin) {
+    throw ApiError.badRequest('Admin not found.');
+  }
+
+  if (admin.role === ADMIN_ROLES.superadmin) {
+    throw ApiError.badRequest("Cannot update superadmin's password.");
+  }
+
+  admin.password = password;
+
+  await admin.save();
+
+  return admin;
+};
+
 async function comparePasswords(plainText, encrypted) {
   const isValid = await bcrypt.compare(plainText, encrypted);
   return isValid;

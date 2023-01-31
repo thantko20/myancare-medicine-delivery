@@ -119,3 +119,7 @@ exports.updateAdminPassword = catchAsync(async (req, res, next) => {
 
   sendSuccessResponse({ res, code: 204 });
 });
+
+exports.overrideAdminPassword = catchAsync(async (req, res, next) => {
+  await authService.overrideAdminPassword(req.params.id, req.body.password);
+});
