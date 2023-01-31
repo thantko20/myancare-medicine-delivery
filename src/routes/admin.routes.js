@@ -9,6 +9,7 @@ const adminController = require('../controllers/admin.controller');
 const { USER_TYPES, ADMIN_ROLES } = require('../constants');
 const validate = require('../middlewares/validate');
 const updateAdminSchema = require('../schemas/updateAdminSchema');
+const updateAdminMeSchema = require('../schemas/updateAdminMeSchema');
 
 router.get(
   '/',
@@ -27,11 +28,10 @@ router.get(
 
 router.patch(
   '/me',
+  validate(updateAdminMeSchema),
   authenticate,
   restrictUserTypes(USER_TYPES.admin),
-  (req, res, next) => {
-    res.send('Update me');
-  }
+  adminController.updateMe
 );
 
 router.get(

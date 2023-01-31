@@ -20,9 +20,15 @@ exports.getMe = (req, res, next) => {
 exports.updateAdminById = catchAsync(async (req, res, next) => {
   const updatedAdmin = await adminService.updateAdminById({
     id: req.params.id,
-    data: req.body,
+    data: req.body || {},
     currentAdminRole: req.user.role,
   });
+
+  sendSuccessResponse({ res, data: updatedAdmin, code: 201 });
+});
+
+exports.updateMe = catchAsync(async (req, res, next) => {
+  const updatedAdmin = await adminService.updateMe(req.user.id, req.body);
 
   sendSuccessResponse({ res, data: updatedAdmin, code: 201 });
 });

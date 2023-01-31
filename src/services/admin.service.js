@@ -43,3 +43,9 @@ exports.updateAdminById = async ({ currentAdminRole, id, data }) => {
 
   return updatedAdmin;
 };
+
+exports.updateMe = async (id, data) => {
+  const updatedMe = await Admin.findByIdAndUpdate(id, data, { new: true });
+
+  return updatedMe;
+};
