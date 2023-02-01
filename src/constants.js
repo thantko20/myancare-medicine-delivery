@@ -30,6 +30,12 @@ exports.ADMIN_ROLES = {
   supervisor: 'SUPERVISOR',
   operator: 'OPERATOR',
 };
+exports.ADMIN_LEVELS = {
+  [this.ADMIN_ROLES.superadmin]: 0,
+  [this.ADMIN_ROLES.admin]: 1,
+  [this.ADMIN_ROLES.supervisor]: 2,
+  [this.ADMIN_ROLES.operator]: 3,
+};
 exports.ADMIN_ROLE_LIST = Object.values(this.ADMIN_ROLES);
 
 exports.USER_TYPES = {

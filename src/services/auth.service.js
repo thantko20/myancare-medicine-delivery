@@ -168,6 +168,42 @@ exports.updatePassword = async ({ userId, oldPassword, newPassword }) => {
   return user;
 };
 
+exports.updateAdminPassword = async ({ userId, oldPassword, newPassword }) => {
+  const admin = await Admin.findById(userId).select('+password');
+  if (!admin) {
+    throw ApiError.badRequest('Admin not found.');
+  }
+
+  const isValidPassword = await comparePasswords(oldPassword, admin.password);
+
+  if (!isValidPassword) {
+    throw ApiError.badRequest('Wrong password');
+  }
+
+  admin.password = newPassword;
+
+  await admin.save();
+
+  return admin;
+};
+
+exports.overrideAdminPassword = async (id, password) => {
+  const admin = await Admin.findById(id);
+  if (!admin) {
+    throw ApiError.badRequest('Admin not found.');
+  }
+
+  if (admin.role === ADMIN_ROLES.superadmin) {
+    throw ApiError.badRequest("Cannot update superadmin's password.");
+  }
+
+  admin.password = password;
+
+  await admin.save();
+
+  return admin;
+};
+
 async function comparePasswords(plainText, encrypted) {
   const isValid = await bcrypt.compare(plainText, encrypted);
   return isValid;
