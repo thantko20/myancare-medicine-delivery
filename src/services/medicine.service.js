@@ -36,15 +36,6 @@ const medicineService = {
       },
     ];
 
-    // searching medicines with category
-    if (req.query.category) {
-      customFilter.push({
-        $match: {
-          'category_details.text': req.query.category,
-        },
-      });
-    }
-
     // cheking outofstock items
     const quantityFilter = {
       ...(req.query.outOfStock === 'true' ? { $lte: 0 } : { $gt: 0 }),
@@ -74,7 +65,7 @@ const medicineService = {
 
     // pagination
     const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 100;
+    const limit = req.query.limit * 1 || 10;
     const skip = (page - 1) * limit;
     customFilter.push(
       {
@@ -97,13 +88,12 @@ const medicineService = {
       });
     }
 
-    // console.log('customFilter', customFilter);
-    // customFilter = {name: {$regex......}, category: {$regex...}}
-
-    /////////////pls ignore this two lines for a moment/////////
-    // let filter = {};
-    // if (req.params.categoryId) filter = { category: req.params.categoryId };
-    ///////////////////////////////////////////////////////////////
+    let filter = {};
+    if (req.params.categoryId) {
+      filter = { category: req.params.categoryId };
+      const medicinesWithCate = await Medicine.find(filter);
+      return medicinesWithCate;
+    }
 
     const result = await Medicine.aggregate(customFilter);
     const medicine = result.map(

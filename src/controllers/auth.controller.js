@@ -34,6 +34,14 @@ exports.createAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.createSuperAdmin = catchAsync(async (req, res, next) => {
+  const superAdmin = await authService.createSuperAdmin(req.body);
+  res.status(201).json({
+    code: 201,
+    data: superAdmin,
+  });
+});
+
 exports.loginAdmin = catchAsync(async (req, res, next) => {
   const payload = await authService.loginAdmin(req.body);
 

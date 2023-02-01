@@ -31,6 +31,8 @@ router.post(
   authController.createAdmin
 );
 
+router.post('/register/superadmin', authController.createSuperAdmin);
+
 router.post('/login', validate(loginUserSchema), authController.loginCustomer);
 
 router.post(

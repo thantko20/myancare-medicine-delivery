@@ -14,6 +14,7 @@ const { ADMIN_ROLES, USER_TYPES } = require('../constants');
 router.get('/', medicineController.getAllMedicines);
 
 router.post(
+  '/',
   authenticate,
   restrictUserTypes('admin'),
   restrictAdmins([ADMIN_ROLES.superadmin, ADMIN_ROLES.admin]),

@@ -69,6 +69,16 @@ exports.createAdmin = async (data, currentUserAdminRole) => {
   return admin;
 };
 
+exports.createSuperAdmin = async (data) => {
+  if (data.role !== ADMIN_ROLES.superadmin) {
+    throw new ApiError('This route is only for creating superadmin', 400);
+  }
+
+  const superAdmin = await Admin.create(data);
+  superAdmin.password = undefined;
+  return superAdmin;
+};
+
 exports.loginAdmin = async ({ email, password }) => {
   const loginError = ApiError.badRequest('Invalid credentials.');
   const admin = await Admin.findOne({ email }).select('+password');
