@@ -12,7 +12,8 @@ const updateUserSchema = [
       'Name must have at least 2 characters and is 50 characters long at most.'
     )
     .isAlphanumeric('en-US', { ignore: ' ' })
-    .escape(),
+    .escape()
+    .optional(),
 
   body('email')
     .isEmail()
@@ -24,7 +25,8 @@ const updateUserSchema = [
         return Promise.reject('Email already exists.');
       }
       return true;
-    }),
+    })
+    .optional(),
   body('phone')
     .isString()
     .isLength({ min: 6, max: 16 })
@@ -37,12 +39,13 @@ const updateUserSchema = [
       }
       return true;
     })
-    .escape(),
-  body('address.zipcode').isString().escape(),
-  body('address.street').isString().escape(),
-  body('address.state').isString().escape(),
-  body('address.city').isString().escape(),
-  body('address.country').isString().escape(),
+    .escape()
+    .optional(),
+  body('address.zipcode').isString().escape().optional(),
+  body('address.street').isString().escape().optional(),
+  body('address.state').isString().escape().optional(),
+  body('address.city').isString().escape().optional(),
+  body('address.country').isString().escape().optional(),
 ];
 
 module.exports = updateUserSchema;

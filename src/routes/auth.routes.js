@@ -55,7 +55,7 @@ router.post(
   authController.overrideAdminPassword
 );
 
-router.router.post(
+router.post(
   '/update-password',
   validate(updateUserPasswordSchema),
   authenticate,
