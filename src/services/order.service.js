@@ -47,7 +47,9 @@ const orderService = {
     );
     const canOrder = await checkStockStatus(data.orderItems, medicines);
     if (!canOrder) {
-      throw ApiError.badRequest();
+      throw ApiError.badRequest(
+        'Some medicine are out of stock or less than the quantity you order.'
+      );
     }
 
     try {
