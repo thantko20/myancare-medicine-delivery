@@ -1,45 +1,51 @@
-const categoryController = require('../controllers/category.controller');
-const medicineRoute = require('../routes/medicine.routes');
 const router = require('express').Router();
 
-const {
-  restrictUserTypes,
-  restrictAdmins,
-} = require('../middlewares/authorize');
+const categoryController = require('../controllers/category.controller');
+const medicineRoute = require('../routes/medicine.routes');
+
 const authenticate = require('../middlewares/authenticate');
-const { ADMIN_ROLES } = require('../constants');
+const { ADMIN_ROLES, USER_TYPES } = require('../constants');
+const authorize = require('../middlewares/authorize');
 
 router.get('/', categoryController.getAllCategories);
 
 router.post(
   '/',
   authenticate,
-  restrictUserTypes('admin'),
-  restrictAdmins(ADMIN_ROLES.admin, ADMIN_ROLES.superadmin),
+  authorize({
+    type: USER_TYPES.admin,
+    adminRoles: [ADMIN_ROLES.superadmin, ADMIN_ROLES.admin],
+  }),
   categoryController.createCategory
 );
 
 router.get(
   '/:id',
   authenticate,
-  restrictUserTypes('admin'),
-  restrictAdmins(ADMIN_ROLES.admin, ADMIN_ROLES.superadmin),
+  authorize({
+    type: USER_TYPES.admin,
+    adminRoles: [ADMIN_ROLES.superadmin, ADMIN_ROLES.admin],
+  }),
   categoryController.getCategory
 );
 
 router.patch(
   '/:id',
   authenticate,
-  restrictUserTypes('admin'),
-  restrictAdmins(ADMIN_ROLES.admin, ADMIN_ROLES.superadmin),
+  authorize({
+    type: USER_TYPES.admin,
+    adminRoles: [ADMIN_ROLES.superadmin, ADMIN_ROLES.admin],
+  }),
   categoryController.updateCategory
 );
 
 router.delete(
   '/:id',
   authenticate,
-  restrictUserTypes('admin'),
-  restrictAdmins(ADMIN_ROLES.admin, ADMIN_ROLES.superadmin),
+  authorize({
+    type: USER_TYPES.admin,
+    adminRoles: [ADMIN_ROLES.superadmin, ADMIN_ROLES.admin],
+  }),
   categoryController.deleteCategory
 );
 
