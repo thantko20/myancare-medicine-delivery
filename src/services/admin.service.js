@@ -1,7 +1,7 @@
 const Admin = require('../models/admin.model');
 const ApiFeatures = require('../utils/apiFeatures');
 const ApiError = require('../utils/apiError');
-const { ADMIN_LEVELS, ADMIN_ROLES } = require('../constants');
+const { ADMIN_LEVELS } = require('../constants');
 
 exports.getAdmins = async (query) => {
   const api = new ApiFeatures(Admin.find(), query);

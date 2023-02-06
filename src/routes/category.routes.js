@@ -7,7 +7,7 @@ const {
   restrictAdmins,
 } = require('../middlewares/authorize');
 const authenticate = require('../middlewares/authenticate');
-const { ADMIN_ROLES, USER_TYPES } = require('../constants');
+const { ADMIN_ROLES } = require('../constants');
 
 router.get('/', categoryController.getAllCategories);
 

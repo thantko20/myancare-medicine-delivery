@@ -97,6 +97,7 @@ const medicineService = {
 
     const result = await Medicine.aggregate(customFilter);
     const medicine = result.map(
+      // eslint-disable-next-line no-unused-vars
       ({ quantity, updatedAt, category, __v, ...rest }) => {
         return {
           ...rest,
@@ -160,7 +161,7 @@ const medicineService = {
     return updatedMedicine;
   },
   deleteMedicine: async (medicineId) => {
-    const deletedMedicine = await Medicine.findByIdAndDelete(medicineId);
+    await Medicine.findByIdAndDelete(medicineId);
   },
 };
 

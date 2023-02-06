@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 require('dotenv').config();
 const { MONGODB_URI } = require('../constants');
 const Medicine = require('../models/medicine.model');

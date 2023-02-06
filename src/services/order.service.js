@@ -273,8 +273,4 @@ async function checkStockStatus(orderItems, medicines) {
   return true;
 }
 
-async function isValidDate(date) {
-  return date && date instanceof Date;
-}
-
 module.exports = orderService;
