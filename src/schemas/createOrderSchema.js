@@ -9,7 +9,9 @@ const createOrderSchema = [
     return true;
   }),
   body('orderItems.*.medicine').isMongoId().withMessage('Invalid ID'),
-  body('orderItems.*.quantity').isInt().withMessage('Must be a number.'),
+  body('orderItems.*.quantity')
+    .isInt({ min: 1, max: 100 })
+    .withMessage('Must be greater than 1.'),
   body('shippingAddress.city').isString().escape().optional(),
   body('shippingAddress.zipcode').isString().escape().optional(),
   body('shippingAddress.street').isString().escape().optional(),
