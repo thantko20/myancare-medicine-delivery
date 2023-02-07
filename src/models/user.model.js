@@ -45,6 +45,7 @@ const userSchema = new Schema(
       type: String,
       select: false,
     },
+    savedMedicines: [{ type: Schema.Types.ObjectId, ref: 'Medicine' }],
   },
   {
     timestamps: true,

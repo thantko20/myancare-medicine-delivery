@@ -63,4 +63,18 @@ router.patch(
   medicineController.updateQuantity
 );
 
+router.post(
+  '/saved/:medicineId',
+  authenticate,
+  authorize({ type: USER_TYPES.customer }),
+  medicineController.addToSaved
+);
+
+router.delete(
+  '/saved/:medicineId',
+  authenticate,
+  authorize({ type: USER_TYPES.customer }),
+  medicineController.removeFromSaved
+);
+
 module.exports = router;

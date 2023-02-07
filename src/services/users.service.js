@@ -63,3 +63,28 @@ exports.updateUser = async (id, data, avatarFile) => {
 exports.deleteUser = async (id) => {
   await User.findByIdAndDelete(id);
 };
+
+exports.addMedicineToSaved = async ({ medicineId, userId }) => {
+  const user = await User.findById(userId);
+
+  if (user.savedMedicines.includes(medicineId)) {
+    throw ApiError.badRequest('Already saved.');
+  }
+
+  user.savedMedicines.push(medicineId);
+
+  await user.save();
+};
+
+exports.removeMedicineFromSaved = async ({ medicineId, userId }) => {
+  const user = await User.findById(userId);
+
+  if (!user.savedMedicines.includes(medicineId)) {
+    throw ApiError.badRequest('Medicine does not exist in saved.');
+  }
+
+  const index = user.savedMedicines.indexOf(medicineId);
+  user.savedMedicines.splice(index, 1);
+
+  await user.save();
+};

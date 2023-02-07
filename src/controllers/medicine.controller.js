@@ -1,4 +1,5 @@
 const medicineService = require('../services/medicine.service');
+const userService = require('../services/users.service');
 const catchAsync = require('../utils/catchAsync');
 const ApiError = require('../utils/apiError');
 const sendSuccessResponse = require('../utils/sendSuccessResponse');
@@ -9,7 +10,7 @@ exports.getAllMedicines = catchAsync(async (req, res, next) => {
 });
 
 exports.getMedicine = catchAsync(async (req, res, next) => {
-  const medicine = await medicineService.getMedicine(req.params.id);
+  const medicine = await medicineService.getMedicineById(req.params.id);
   sendSuccessResponse({ res, data: medicine });
 });
 
@@ -49,4 +50,26 @@ exports.updateQuantity = catchAsync(async (req, res, next) => {
 exports.deleteMedicine = catchAsync(async (req, res, next) => {
   await medicineService.deleteMedicine(req.params.id);
   sendSuccessResponse({ res, code: 204, data: null });
+});
+
+exports.addToSaved = catchAsync(async (req, res, next) => {
+  const medicine = await medicineService.getMedicineById(req.params.medicineId);
+
+  await userService.addMedicineToSaved({
+    medicineId: medicine.id,
+    userId: req.user.id,
+  });
+
+  sendSuccessResponse({ res, data: medicine });
+});
+
+exports.removeFromSaved = catchAsync(async (req, res, next) => {
+  const medicine = await medicineService.getMedicineById(req.params.medicineId);
+
+  await userService.removeMedicineFromSaved({
+    medicineId: medicine.id,
+    userId: req.user.id,
+  });
+
+  sendSuccessResponse({ res, code: 204 });
 });

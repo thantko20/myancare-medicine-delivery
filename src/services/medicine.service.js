@@ -108,7 +108,7 @@ const medicineService = {
 
     return medicine;
   },
-  getMedicine: async (medicineId) => {
+  getMedicineById: async (medicineId) => {
     const medicine = await Medicine.findById(medicineId);
     return medicine;
   },
