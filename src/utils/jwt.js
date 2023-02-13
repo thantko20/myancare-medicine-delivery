@@ -38,7 +38,7 @@ exports.verifyAccessToken = (accessToken) => {
     const authError = ApiError.notAuthenticated('Not Logged in.');
 
     jwt.verify(accessToken, ACCESS_TOKEN_SECRET, async (error, decoded) => {
-      if (error) reject(authError);
+      if (error || !decoded) return reject(authError);
 
       const { userId, userType } = decoded;
       const model = modelWithTypes[userType];

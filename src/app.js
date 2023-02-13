@@ -13,7 +13,7 @@ const app = express();
 
 // Usage: `app.options("<route-you-want-to-restrict>", cors(/* Cors Options */))`
 // Example: `app.options("/api/v1/examples/:id", cors({origin: 'https://example.com'}))`
-app.options('*', cors());
+app.use(cors());
 
 if (NODE_ENV !== 'production') {
   app.use(morgan('dev'));

@@ -99,6 +99,7 @@ exports.loginAdmin = async ({ email, password }) => {
 };
 
 exports.refreshAccessToken = async (token) => {
+  console.log(token);
   if (!token) throw ApiError.notAuthenticated();
 
   const { user, userType } = await verifyRefreshToken(token);
